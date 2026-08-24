@@ -12,93 +12,266 @@
     font-family: "Microsoft Yahei", sans-serif;
 }
 body{
-    background: #12161c;
+    background: transparent;
     color: #fff;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px 15px;
+    overflow-x:hidden;
+}
+/* 全屏画布背景层 */
+#bgCanvas{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    z-index:-10;
+    background:#050608;
 }
 h1{
-    color: #ffc241;
+    color: #00d2ff;
     margin-bottom: 16px;
-    font-size: 24px;
-    text-shadow: 0 0 8px #ffc24155;
-    text-align:center;
+    font-size: 26px;
+    text-shadow:
+        0 0 12px rgba(0, 210, 255, 0.8),
+        0 0 24px rgba(0, 255, 204, 0.4);
+    text-align: center;
+    letter-spacing: 2px;
 }
+/* ========== 科幻FPS通用按钮 ========== */
+.diff-btn{
+    padding: 9px 16px;
+    border: 1px solid rgba(0, 210, 255, 0.35);
+    background: linear-gradient(135deg, rgba(10, 15, 30, 0.95), rgba(20, 30, 60, 0.9));
+    color: #00d2ff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.22s ease;
+    box-shadow:
+        inset 0 0 12px rgba(0, 210, 255, 0.08),
+        0 0 12px rgba(0, 210, 255, 0.12);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.diff-btn::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 210, 255, 0.22),
+        transparent
+    );
+    transition: left 0.45s ease;
+}
+
+.diff-btn:hover::before{
+    left: 100%;
+}
+
+.diff-btn:hover{
+    border-color: rgba(0, 210, 255, 0.75);
+    color: #ffffff;
+    box-shadow:
+        inset 0 0 18px rgba(0, 210, 255, 0.18),
+        0 0 22px rgba(0, 210, 255, 0.35);
+}
+
+.diff-btn.active{
+    background: linear-gradient(135deg, #00d2ff, #00ffcc);
+    color: #08111f;
+    border-color: #00ffcc;
+    font-weight: bold;
+    box-shadow:
+        0 0 18px rgba(0, 210, 255, 0.45),
+        0 0 34px rgba(0, 255, 204, 0.25);
+}
+
+.diff-btn.fate.active{
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    color: #fff;
+    border-color: #a855f7;
+    box-shadow:
+        0 0 18px rgba(168, 85, 247, 0.45),
+        0 0 34px rgba(236, 72, 153, 0.25);
+}
+
+/* ========== 重置按钮 ========== */
+.reset-btn{
+    padding: 10px 20px;
+    border: 1px solid rgba(255, 80, 120, 0.45);
+    background: linear-gradient(135deg, rgba(80, 10, 30, 0.95), rgba(120, 20, 50, 0.9));
+    color: #ff5c8a;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.22s ease;
+    font-size: 14px;
+    box-shadow:
+        inset 0 0 12px rgba(255, 80, 120, 0.08),
+        0 0 12px rgba(255, 80, 120, 0.12);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.reset-btn::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 80, 120, 0.22),
+        transparent
+    );
+    transition: left 0.45s ease;
+}
+
+.reset-btn:hover::before{
+    left: 100%;
+}
+
+.reset-btn:hover{
+    box-shadow:
+        inset 0 0 18px rgba(255, 80, 120, 0.18),
+        0 0 24px rgba(255, 80, 120, 0.35);
+    transform: translateY(-2px);
+}
+
+.reset-btn:active{
+    transform: translateY(1px);
+}
+
+/* ========== 主抽取按钮 ========== */
+#spinBtn{
+    margin-top: 32px;
+    padding: 16px 64px;
+    font-size: 20px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00d2ff, #00ffcc, #ffcc00);
+    color: #08111f;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow:
+        0 0 18px rgba(0, 210, 255, 0.45),
+        0 0 34px rgba(0, 255, 204, 0.25),
+        inset 0 0 12px rgba(255, 255, 255, 0.35);
+    transition: 0.22s ease;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+#spinBtn::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.35),
+        transparent
+    );
+    transition: left 0.55s ease;
+}
+
+#spinBtn:hover::before{
+    left: 100%;
+}
+
+#spinBtn:hover{
+    transform: translateY(-3px);
+    box-shadow:
+        0 0 24px rgba(0, 210, 255, 0.55),
+        0 0 44px rgba(0, 255, 204, 0.35),
+        inset 0 0 18px rgba(255, 255, 255, 0.45);
+}
+
+#spinBtn:active{
+    transform: translateY(1px);
+}
+
+#spinBtn:disabled{
+    background: linear-gradient(135deg, #2c3e55, #1a2535);
+    color: #5f6f88;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
 /* ========== 配置面板 ========== */
 .config-panel{
     width: 680px;
     max-width: 100%;
-    background: #1a1f27;
-    border: 1px solid #333;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 20px;
+    background: rgba(10, 15, 30, 0.86);
+    border: 1px solid rgba(0, 210, 255, 0.35);
+    box-shadow:
+        0 0 18px rgba(0, 210, 255, 0.12),
+        inset 0 0 22px rgba(0, 0, 0, 0.75);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 22px;
+    backdrop-filter: blur(10px);
 }
 .config-section{
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 .config-section:last-child{
     margin-bottom: 0;
 }
 .config-title{
-    color: #ffc241;
+    color: #00d2ff;
     font-size: 15px;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 6px;
+    text-shadow:0 0 6px rgba(0, 210, 255, 0.35);
 }
 .check-group{
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 14px;
+    gap: 10px 16px;
 }
 .check-item{
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     cursor: pointer;
     font-size: 14px;
     color: #ddd;
     user-select: none;
+    transition:0.25s;
 }
 .check-item input{
     cursor: pointer;
-    accent-color: #ffc241;
+    accent-color: #00d2ff;
+    width:16px;height:16px;
 }
 .check-item:hover{
-    color: #ffc241;
-}
-/* 难度选择 */
-.diff-group{
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-.diff-btn{
-    padding: 6px 12px;
-    border: 1px solid #444;
-    background: #222831;
-    color: #ccc;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: 0.2s;
-}
-.diff-btn.active{
-    background: linear-gradient(135deg,#ffc241,#ff9f1a);
-    color: #111;
-    border-color: #ffc241;
-    font-weight: bold;
-}
-.diff-btn.fate.active{
-    background: linear-gradient(135deg,#a855f7,#ec4899);
-    color: #fff;
-    border-color: #a855f7;
+    color: #00d2ff;
+    text-shadow:0 0 6px rgba(0, 210, 255, 0.4);
 }
 /* 地图子选项 */
 .map-sublist{
@@ -112,20 +285,10 @@ h1{
 }
 .control-box{
     display:flex;
-    gap:10px;
-    margin-bottom:20px;
+    gap:12px;
+    margin-bottom:22px;
     flex-wrap:wrap;
     justify-content:center;
-}
-.reset-btn{
-    padding:8px 14px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    transition:0.2s;
-    font-size:14px;
-    background:#c0392b;
-    color:#fff;
 }
 /* ========== 开箱滚动核心 ========== */
 .case-wrap{
@@ -136,12 +299,15 @@ h1{
 .case-container{
     width: 100%;
     height: 120px;
-    background: #1a1f27;
-    border: 2px solid #333;
-    border-radius: 12px;
+    background: rgba(10, 15, 30, 0.88);
+    border: 2px solid rgba(0, 210, 255, 0.35);
+    border-radius: 14px;
     overflow: hidden;
     position: relative;
-    box-shadow: inset 0 0 20px #0008;
+    box-shadow:
+        inset 0 0 24px rgba(0, 0, 0, 0.85),
+        0 0 18px rgba(0, 210, 255, 0.12);
+    backdrop-filter: blur(8px);
 }
 .case-track{
     height: 100%;
@@ -154,9 +320,9 @@ h1{
     width: 130px;
     height: 90px;
     margin: 0 5px;
-    background: #222831;
-    border: 1px solid #444;
-    border-radius: 8px;
+    background: rgba(20, 30, 60, 0.8);
+    border: 1px solid rgba(0, 210, 255, 0.25);
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -164,30 +330,35 @@ h1{
     text-align: center;
     font-size: 13px;
     font-weight: bold;
-    color: #eee;
+    color: #e6f7ff;
     padding: 0 6px;
     line-height: 1.3;
     word-break: break-all;
+    box-shadow:
+        inset 0 0 12px rgba(0, 0, 0, 0.55),
+        0 0 8px rgba(0, 210, 255, 0.08);
 }
 .case-item .sub{
     font-size: 11px;
-    color: #aaa;
+    color: #91a4b8;
     font-weight: normal;
     margin-top: 2px;
 }
 .case-item:nth-child(even){
-    background: #2a313c;
+    background: rgba(30, 45, 80, 0.8);
 }
-/* 中间瞄准线 */
+/* 中间瞄准线改成蓝绿色科幻感 */
 .case-indicator{
     position: absolute;
     top: 0;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 3px;
-    background: #ffc241;
-    box-shadow: 0 0 10px #ffc241;
+    width: 4px;
+    background: linear-gradient(180deg, #00d2ff, #00ffcc);
+    box-shadow:
+        0 0 14px #00d2ff,
+        0 0 24px rgba(0, 255, 204, 0.65);
     z-index: 10;
     pointer-events: none;
 }
@@ -197,83 +368,71 @@ h1{
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    border-left: 9px solid transparent;
-    border-right: 9px solid transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
 }
 .case-indicator::before{
-    top: -2px;
-    border-top: 14px solid #ffc241;
+    top: -3px;
+    border-top: 16px solid #00d2ff;
 }
 .case-indicator::after{
-    bottom: -2px;
-    border-bottom: 14px solid #ffc241;
-}
-#spinBtn{
-    margin-top:30px;
-    padding:14px 48px;
-    font-size:18px;
-    font-weight:bold;
-    background:linear-gradient(135deg,#ffc241,#ff9f1a);
-    color:#111;
-    border:none;
-    border-radius:12px;
-    cursor:pointer;
-    box-shadow:0 4px 12px #ffc24144;
-    transition:0.2s;
-}
-#spinBtn:active{transform:scale(0.96);}
-#spinBtn:disabled{
-    background:#444;
-    color:#888;
-    cursor:not-allowed;
-    box-shadow:none;
-    transform:none;
+    bottom: -3px;
+    border-bottom: 16px solid #00ffcc;
 }
 .result{
-    margin-top:20px;
-    font-size:18px;
-    color:#ffc241;
-    min-height:28px;
+    margin-top:24px;
+    font-size:20px;
+    color:#00d2ff;
+    min-height:30px;
     text-align:center;
+    text-shadow:0 0 10px rgba(0, 210, 255, 0.4);
 }
 .record{
-    margin-top:16px;
-    padding:14px 16px;
-    border:1px solid #444;
-    border-radius:8px;
+    margin-top: 18px;
+    padding: 16px 18px;
+    border: 1px solid rgba(0, 210, 255, 0.35);
+    border-radius: 12px;
     width: 620px;
     max-width: 100%;
+    background: rgba(10, 15, 30, 0.86);
+    backdrop-filter: blur(10px);
+    box-shadow:
+        0 0 18px rgba(0, 0, 0, 0.75),
+        inset 0 0 18px rgba(0, 210, 255, 0.08);
 }
 .record h3{
-    color:#ffc241;
-    font-size:16px;
-    margin-bottom:10px;
+    color: #00d2ff;
+    font-size: 17px;
+    margin-bottom: 12px;
+    text-shadow: 0 0 8px rgba(0, 210, 255, 0.35);
 }
 .record p{
     font-size:14px;
-    color:#ddd;
-    line-height: 2;
+    color:#e6f7ff;
+    line-height: 2.1;
 }
 .tips{
-    margin-top:12px;
+    margin-top:14px;
     color:#aaa;
     font-size:13px;
     text-align:center;
     max-width:620px;
 }
 @media(max-width:650px){
-    .case-container{height: 100px;}
+    .case-container{height: 104px;}
     .case-item{
         width: 105px;
         height: 76px;
         font-size: 12px;
     }
-    h1{font-size:20px;}
-    .config-panel{padding: 12px;}
+    h1{font-size:22px;}
+    .config-panel{padding: 14px;}
+    #spinBtn{padding:14px 36px;font-size:17px;}
 }
 </style>
 </head>
 <body>
+<canvas id="bgCanvas"></canvas>
 <h1>🎯三角洲行动全能抽取器</h1>
 <!-- 配置面板 -->
 <div class="config-panel">
@@ -347,6 +506,175 @@ h1{
 </div>
 <div class="tips"></div>
 <script>
+// ===================== Canvas 流星雨动态背景 =====================
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resizeCanvas() {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Meteor {
+    constructor() {
+        this.reset(true);
+    }
+
+    reset(randomDelay = false) {
+        this.x = Math.random() * W * 1.5;
+        this.y = Math.random() * H * 0.55 - 80;
+        this.angle = Math.PI / 4 + (Math.random() - 0.5) * 0.25;
+        this.speed = 1.8 + Math.random() * 3.2;
+        this.vx = -Math.cos(this.angle) * this.speed;
+        this.vy = Math.sin(this.angle) * this.speed;
+        this.trail = [];
+        this.maxTrail = 45 + Math.random() * 35;
+        this.brightness = 0.45 + Math.random() * 0.35;
+        this.size = 1.2 + Math.random() * 2.2;
+        this.flickerPhase = Math.random() * Math.PI * 2;
+        this.flickerSpeed = 0.008 + Math.random() * 0.012;
+        this.delay = randomDelay ? Math.random() * 400 : 0;
+        this.active = false;
+    }
+
+    update(time) {
+        if (this.delay > 0) {
+            this.delay--;
+            return;
+        }
+        this.active = true;
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > this.maxTrail) {
+            this.trail.shift();
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        this.flickerPhase += this.flickerSpeed;
+        if (this.x < -250 || this.y > H + 250) {
+            this.reset(false);
+        }
+    }
+
+    draw(time) {
+        if (!this.active || this.trail.length < 2) return;
+        const flicker = 0.75 + Math.sin(this.flickerPhase) * 0.25;
+        const alpha = this.brightness * flicker;
+        ctx.beginPath();
+        ctx.moveTo(this.trail[0].x, this.trail[0].y);
+        for (let i = 1; i < this.trail.length; i++) {
+            ctx.lineTo(this.trail[i].x, this.trail[i].y);
+        }
+        const trailGradient = ctx.createLinearGradient(
+            this.trail[0].x,
+            this.trail[0].y,
+            this.x,
+            this.y
+        );
+        trailGradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
+        trailGradient.addColorStop(0.25, `rgba(210, 230, 255, ${alpha * 0.18})`);
+        trailGradient.addColorStop(0.55, `rgba(255, 255, 255, ${alpha * 0.35})`);
+        trailGradient.addColorStop(0.85, `rgba(255, 255, 255, ${alpha * 0.65})`);
+        trailGradient.addColorStop(1, `rgba(255, 255, 255, ${alpha})`);
+        ctx.strokeStyle = trailGradient;
+        ctx.lineWidth = this.size;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.shadowBlur = 24;
+        ctx.globalAlpha = alpha * 0.35;
+        ctx.strokeStyle = 'rgba(210, 230, 255, 0.6)';
+        ctx.lineWidth = this.size * 3.5;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 1.6, 0, Math.PI * 2);
+        const headGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 1.6);
+        headGradient.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+        headGradient.addColorStop(0.45, 'rgba(210, 230, 255, 0.55)');
+        headGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = headGradient;
+        ctx.fill();
+    }
+}
+
+// 背景星星
+class Star {
+    constructor() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.size = Math.random() * 2 + 0.5;
+        this.baseAlpha = 0.3 + Math.random() * 0.5;
+        this.twinkleSpeed = 0.02 + Math.random() * 0.04;
+        this.twinklePhase = Math.random() * Math.PI * 2;
+    }
+
+    draw(time) {
+        const alpha = this.baseAlpha + Math.sin(time * this.twinkleSpeed + this.twinklePhase) * 0.25;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.fill();
+    }
+}
+
+const stars = [];
+const meteors = [];
+
+for (let i = 0; i < 120; i++) {
+    stars.push(new Star());
+}
+
+for (let i = 0; i < 12; i++) {
+    meteors.push(new Meteor());
+}
+
+// FPS 暗色星空背景 + HUD 扫描线
+function drawBgBase(t) {
+    const bgGrd = ctx.createLinearGradient(0, 0, W, H);
+    bgGrd.addColorStop(0, '#050608');
+    bgGrd.addColorStop(0.5, '#0b0e14');
+    bgGrd.addColorStop(1, '#131820');
+    ctx.fillStyle = bgGrd;
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(0, 210, 255, 0.04)';
+    ctx.lineWidth = 1;
+    for (let y = 0; y < H; y += 32) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+    }
+    const vignet = ctx.createRadialGradient(W / 2, H / 2, Math.max(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.85);
+    vignet.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    vignet.addColorStop(1, 'rgba(0, 0, 0, 0.65)');
+    ctx.fillStyle = vignet;
+    ctx.fillRect(0, 0, W, H);
+}
+
+let frameTimer = 0;
+
+function loop() {
+    frameTimer++;
+    drawBgBase(frameTimer);
+    for (const star of stars) {
+        star.draw(frameTimer);
+    }
+    for (const meteor of meteors) {
+        meteor.update(frameTimer);
+        meteor.draw(frameTimer);
+    }
+    requestAnimationFrame(loop);
+}
+
+loop();
+
 // ===================== 可自行修改的抽取配置 =====================
 const DRAW_CONFIG = {
     armorLevelWeight: {
@@ -379,7 +707,6 @@ const weaponList = [
     {name:"QBZ-95-1", category:"rifle"},
     {name:"AUG突击步枪", category:"rifle"},
     {name:"G3战斗步枪", category:"rifle"},
-
     {name:"Vector冲锋枪", category:"smg"},
     {name:"P90冲锋枪", category:"smg"},
     {name:"MP5冲锋枪", category:"smg"},
@@ -387,7 +714,6 @@ const weaponList = [
     {name:"UZI冲锋枪", category:"smg"},
     {name:"野牛冲锋枪", category:"smg"},
     {name:"QCQ171冲锋枪", category:"smg"},
-
     {name:"SVCH精确射手步枪", category:"sniper"},
     {name:"Min-14", category:"sniper"},
     {name:"SVD射手步枪", category:"sniper"},
@@ -396,17 +722,14 @@ const weaponList = [
     {name:"SV-98狙击枪", category:"sniper"},
     {name:"R93狙击枪", category:"sniper"},
     {name:"M700狙击枪", category:"sniper"},
-
     {name:"PKM通用机枪", category:"lmg"},
     {name:"M249轻机枪", category:"lmg"},
     {name:"QJB-201机枪", category:"lmg"},
-
     {name:"M870霰弹枪", category:"shotgun"},
     {name:"FS-12霰弹枪", category:"shotgun"},
     {name:"M1014霰弹枪", category:"shotgun"},
     {name:"S12K霰弹枪", category:"shotgun"},
     {name:"725双管霰弹枪", category:"shotgun"},
-
     {name:"G18手枪", category:"pistol"},
     {name:"沙漠之鹰", category:"pistol"},
     {name:"93R手枪", category:"pistol"},
@@ -483,7 +806,6 @@ const mapSourcePool = {
     top: ["巴克什","航天基地","潮汐监狱"]
 };
 const mapDiffText = {secret:"机密", top:"绝密", mapfate:"地图命运"};
-
 // ===================== 全局状态 =====================
 let armorMode = "fate";
 let mapDiffMode = "secret";
@@ -494,7 +816,6 @@ let spinIndex = 0;
 let resultSet = {};
 let isSpinning = false;
 let dualGunExcludeCat = null;
-
 let lastResult = {
     weapon: '',
     helmet: '',
@@ -508,14 +829,11 @@ const resetBtn = document.getElementById('resetBtn');
 const resText = document.getElementById('resText');
 const recordText = document.getElementById('recordText');
 const weapAllToggleBtn = document.getElementById('weapAllToggle');
-
 const REPEAT_COUNT = 10;
 const ANIM_DURATION = 4000;
 const EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
-
 // =========【新增】同步命运按钮高亮状态 =========
 function syncFateBtnState(){
-    // 判断是否完整全部6类武器都选中
     const isAllSel = ALL_WEAPON_CATS.every(cat=> selectedWeaponCats.includes(cat));
     if(isAllSel){
         weapAllToggleBtn.classList.add('active');
@@ -523,7 +841,6 @@ function syncFateBtnState(){
         weapAllToggleBtn.classList.remove('active');
     }
 }
-
 // ===================== 配置交互 =====================
 document.querySelectorAll('.weapon-cat-btn').forEach(btn=>{
     btn.onclick = function(){
@@ -535,12 +852,10 @@ document.querySelectorAll('.weapon-cat-btn').forEach(btn=>{
             selectedWeaponCats.push(cat);
             this.classList.add('active');
         }
-        syncFateBtnState(); // 更新命运按钮亮灭
+        syncFateBtnState();
         if(!isSpinning) resetAll();
     }
 });
-
-// 命运全选切换按钮
 weapAllToggleBtn.onclick = function(){
     const isAll = ALL_WEAPON_CATS.every(c=>selectedWeaponCats.includes(c));
     if(isAll){
@@ -550,15 +865,13 @@ weapAllToggleBtn.onclick = function(){
         selectedWeaponCats = [...ALL_WEAPON_CATS];
         document.querySelectorAll('.weapon-cat-btn').forEach(b=>b.classList.add('active'));
     }
-    syncFateBtnState(); // 更新命运按钮亮灭
+    syncFateBtnState();
     if(!isSpinning) resetAll();
 };
-
 (function initWeaponCatBtns(){
     document.querySelectorAll('.weapon-cat-btn').forEach(b=>b.classList.add('active'));
-    syncFateBtnState(); //初始化命运按钮状态
+    syncFateBtnState();
 })();
-
 document.getElementById('chk-map').addEventListener('change', function(){
     document.getElementById('mapConfigSection').style.display = this.checked ? 'block' : 'none';
 });
@@ -578,7 +891,6 @@ document.querySelectorAll('[data-mapdiff]').forEach(btn=>{
         if(!isSpinning) resetAll();
     };
 });
-
 // ===================== 工具函数 =====================
 function shuffleArray(arr) {
     const newArr = [...arr];
@@ -617,13 +929,11 @@ function weightedRandom(pool, category){
     }
     return pool.length - 1;
 }
-
 function buildQueue(){
     const queue = [];
     const weaponChecked = document.getElementById('chk-weapon').checked;
     const dualGun = document.getElementById('chk-dualGun').checked;
     dualGunExcludeCat = null;
-
     if(weaponChecked){
         if(dualGun){
             queue.push({key:'weapon', label:'武器①', isDualFirst:true});
@@ -638,7 +948,6 @@ function buildQueue(){
     if(document.getElementById('chk-map').checked) queue.push({key:'map', label:'地图'});
     return queue;
 }
-
 function getCurrentPool(){
     const current = spinQueue[spinIndex];
     if(!current) return [];
@@ -683,7 +992,6 @@ function getCurrentPool(){
     }
     return [];
 }
-
 function buildTrack(pool){
     caseTrack.innerHTML = '';
     for(let r = 0; r < REPEAT_COUNT; r++){
@@ -703,14 +1011,12 @@ function updateRecord(){
     });
     recordText.innerHTML = lines.join('<br>');
 }
-
 function resetAll(){
     spinQueue = buildQueue();
     spinIndex = 0;
     resultSet = {};
     resText.innerText = "";
     const dualGun = document.getElementById('chk-dualGun').checked;
-
     if(dualGun && selectedWeaponCats.length < 2){
         spinBtn.innerText = "⚠️双枪模式需要至少勾选2个武器分类";
         spinBtn.disabled = true;
@@ -721,15 +1027,13 @@ function resetAll(){
         spinBtn.innerText = `开始抽取（共${spinQueue.length}项）`;
         spinBtn.disabled = false;
     }
-
     const pool = shuffleArray(getCurrentPool());
     if(pool.length > 0) buildTrack(pool);
     caseTrack.style.transition = 'none';
     caseTrack.style.transform = 'translateX(0)';
     updateRecord();
-    syncFateBtnState(); //重置也要同步命运按钮状态
+    syncFateBtnState();
 }
-
 resetBtn.onclick = function(){
     if(isSpinning) return;
     resetAll();
@@ -744,7 +1048,6 @@ document.querySelectorAll('.map-check').forEach(cb=>{
         if(!isSpinning) resetAll();
     });
 });
-
 function runSpin(){
     if(isSpinning) return;
     if(spinQueue.length === 0) return;
@@ -768,7 +1071,6 @@ function runSpin(){
         }
         return;
     }
-
     resText.innerText = `正在抽取${current.label}...`;
     isSpinning = true;
     spinBtn.disabled = true;
@@ -776,7 +1078,6 @@ function runSpin(){
     caseTrack.style.transition = 'none';
     caseTrack.style.transform = 'translateX(0)';
     caseTrack.offsetHeight;
-
     const winIndex = weightedRandom(pool, current.key);
     const winItem = pool[winIndex];
     const itemEl = caseTrack.querySelector('.case-item');
@@ -792,7 +1093,6 @@ function runSpin(){
     setTimeout(()=>{
         const winText = winItem.text + (winItem.sub ? `（${winItem.sub}）` : '');
         resultSet[current.key + '_' + current.label] = winText;
-
         if(current.isDualFirst){
             dualGunExcludeCat = winItem.category;
         }

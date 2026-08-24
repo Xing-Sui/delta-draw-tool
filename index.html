@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh‑CN">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF‑8" />
-<meta name="viewport" content="width=device‑width, initial‑scale=1.0" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>三角洲行动工具箱</title>
 <style>
 *{
     margin: 0;
     padding: 0;
-    box‑sizing: border‑box;
-    font‑family: "Microsoft Yahei", sans‑serif;
+    box-sizing: border-box;
+    font-family: "Microsoft Yahei", sans-serif;
 }
 body{
     background: #12161c;
@@ -22,11 +22,11 @@ body{
 /* ========== 左侧侧边栏 ========== */
 .sidebar{
     width: 220px;
-    flex‑shrink: 0;
+    flex-shrink: 0;
     background: #1a1f27;
-    border‑right: 1px solid #333;
+    border-right: 1px solid #333;
     display: flex;
-    flex‑direction: column;
+    flex-direction: column;
     padding: 20px 0;
     transition: width 0.3s ease;
 }
@@ -37,68 +37,68 @@ body{
     overflow:hidden;
 }
 
-.sidebar‑title{
+.sidebar-title{
     color: #ffc241;
-    font‑size: 18px;
-    font‑weight: bold;
-    text‑align: center;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
     padding: 0 16px 20px;
-    border‑bottom: 1px solid #333;
-    margin‑bottom: 10px;
-    text‑shadow: 0 0 8px #ffc24155;
+    border-bottom: 1px solid #333;
+    margin-bottom: 10px;
+    text-shadow: 0 0 8px #ffc24155;
 }
-.nav‑list{
+.nav-list{
     flex: 1;
-    overflow‑y: auto;
+    overflow-y: auto;
 }
-.nav‑item{
+.nav-item{
     display: block;
     padding: 12px 20px;
     color: #ddd;
     cursor: pointer;
-    font‑size: 14px;
-    border‑left: 3px solid transparent;
+    font-size: 14px;
+    border-left: 3px solid transparent;
     transition: 0.2s;
-    user‑select: none;
+    user-select: none;
 }
-.nav‑item:hover{
+.nav-item:hover{
     background: #222831;
     color: #ffc241;
 }
-.nav‑item.active{
+.nav-item.active{
     background: #222831;
     color: #ffc241;
-    border‑left‑color: #ffc241;
-    font‑weight: bold;
+    border-left-color: #ffc241;
+    font-weight: bold;
 }
-.sidebar‑footer{
+.sidebar-footer{
     padding: 12px 16px;
-    border‑top: 1px solid #333;
+    border-top: 1px solid #333;
     color: #888;
-    font‑size: 12px;
-    text‑align: center;
+    font-size: 12px;
+    text-align: center;
 }
 
 /* 折叠按钮 */
-.toggle‑sidebar‑btn{
+.toggle-sidebar-btn{
     position:absolute;
     left:220px;
     top:12px;
-    z‑index:99;
+    z-index:99;
     background:#1a1f27;
     color:#ffc241;
     border:1px solid #444;
-    border‑radius:0 6px 6px 0;
+    border-radius:0 6px 6px 0;
     padding:6px 8px;
     cursor:pointer;
     transition:left 0.3s ease;
 }
-body.sidebar‑collapsed .toggle‑sidebar‑btn{
+body.sidebar-collapsed .toggle-sidebar-btn{
     left:0px;
 }
 
 /* ========== 右侧内容区 ========== */
-.main‑content{
+.main-content{
     flex: 1;
     position: relative;
 }
@@ -110,27 +110,27 @@ body.sidebar‑collapsed .toggle‑sidebar‑btn{
 }
 
 /* ========== 移动端适配 ========== */
-@media(max‑width: 768px){
+@media(max-width: 768px){
     .sidebar{
         width: 100%;
         height: auto;
         position: fixed;
         top: 0;
         left: 0;
-        z‑index: 100;
+        z-index: 100;
         padding: 10px 0;
     }
-    .sidebar‑title{
-        padding‑bottom: 10px;
-        margin‑bottom: 0;
+    .sidebar-title{
+        padding-bottom: 10px;
+        margin-bottom: 0;
     }
-    .nav‑list{
+    .nav-list{
         display: none;
     }
-    .nav‑list.show{
+    .nav-list.show{
         display: block;
     }
-    .toggle‑sidebar‑btn{
+    .toggle-sidebar-btn{
         display:none;
     }
 }
@@ -138,27 +138,28 @@ body.sidebar‑collapsed .toggle‑sidebar‑btn{
 </head>
 <body>
 <!-- 折叠侧边栏按钮 -->
-<button class="toggle‑sidebar‑btn" id="toggleBtn">◀</button>
+<button class="toggle-sidebar-btn" id="toggleBtn">◀</button>
 
 <!-- 左侧导航栏 -->
 <div class="sidebar" id="sidebar">
-    <div class="sidebar‑title">🎯 三角洲工具箱</div>
-    <div class="nav‑list" id="navList">
+    <div class="sidebar-title">🎯 三角洲工具箱</div>
+    <div class="nav-list" id="navList">
         <!-- 导航菜单由JS自动生成 -->
     </div>
-    <div class="sidebar‑footer">分类</div>
+    <div class="sidebar-footer">分类</div>
 </div>
 
 <!-- 右侧iframe容器 -->
-<div class="main‑content">
+<div class="main-content">
     <iframe id="iframePage" src=""></iframe>
 </div>
 
 <script>
 // ===================== 导航配置（加新功能就在这里加一行） =====================
-// 配置说明：title=菜单显示文字, page=对应的html文件路径，使用./相对路径
+// 现在页面全部放在仓库根目录，不要pages文件夹
 const NAV_CONFIG = [
-    { title: "全能抽取器", page: "./pages/1.html" }
+    { title: "全能抽取器", page: "./draw.html" }
+    //后续新增示例：{ title:"工具2", page:"./tool2.html" }
 ];
 // ==========================================================================
 
@@ -171,7 +172,7 @@ let currentActive = 0;
 // 侧边栏折叠/展开
 toggleBtn.onclick = function(){
     sidebar.classList.toggle('collapsed');
-    document.body.classList.toggle('sidebar‑collapsed');
+    document.body.classList.toggle('sidebar-collapsed');
     toggleBtn.innerText = sidebar.classList.contains('collapsed') ? '▶' : '◀';
 };
 
@@ -180,18 +181,18 @@ function renderNav(){
     navList.innerHTML = '';
     NAV_CONFIG.forEach((item, index) => {
         const div = document.createElement('div');
-        div.className = 'nav‑item' + (index === currentActive ? ' active' : '');
+        div.className = 'nav-item' + (index === currentActive ? ' active' : '');
         div.innerText = item.title;
         div.onclick = () => switchPage(index);
         navList.appendChild(div);
     });
 }
 
-// 切换页面 使用iframe，完全隔离页面JS、CSS，不会冲突
+// 切换页面 使用iframe
 function switchPage(index){
     if(index === currentActive) return;
     currentActive = index;
-    document.querySelectorAll('.nav‑item').forEach((el, i) => {
+    document.querySelectorAll('.nav-item').forEach((el, i) => {
         el.classList.toggle('active', i === index);
     });
     iframePage.src = NAV_CONFIG[index].page;

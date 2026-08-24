@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>三角洲行动全能抽取器 - 开箱滚动版</title>
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Microsoft Yahei", sans-serif;
+}
+body{
+    background: #12161c;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 15px;
+}
+h1{
+    color: #ffc241;
+    margin-bottom: 16px;
+    font-size: 24px;
+    text-shadow: 0 0 8px #ffc24155;
+    text-align:center;
+}
+
+/* ========== 配置面板 ========== */
+.config-panel{
+    width: 680px;
+    max-width: 100%;
+    background: #1a1f27;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+.config-section{
+    margin-bottom: 14px;
+}
+.config-section:last-child{
+    margin-bottom: 0;
+}
+.config-title{
+    color: #ffc241;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.check-group{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+}
+.check-item{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #ddd;
+    user-select: none;
+}
+.check-item input{
+    cursor: pointer;
+    accent-color: #ffc241;
+}
+.check-item:hover{
+    color: #ffc241;
+}
+
+/* 难度选择 */
+.diff-group{
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.diff-btn{
+    padding: 6px 12px;
+    border: 1px solid #444;
+    background: #222831;
+    color: #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s;
+}
+.diff-btn.active{
+    background: linear-gradient(135deg,#ffc241,#ff9f1a);
+    color: #111;
+    border-color: #ffc241;
+    font-weight: bold;
+}
+.diff-btn.fate.active{
+    background: linear-gradient(135deg,#a855f7,#ec4899);
+    color: #fff;
+    border-color: #a855f7;
+}
+
+/* 地图子选项 */
+.map-sublist{
+    margin-top: 8px;
+    padding-left: 8px;
+    border-left: 2px solid #333;
+    display: none;
+}
+.map-sublist.show{
+    display: block;
+}
+
+.control-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+.reset-btn{
+    padding:8px 14px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.2s;
+    font-size:14px;
+    background:#c0392b;
+    color:#fff;
+}
+
+/* ========== 开箱滚动核心 ========== */
+.case-wrap{
+    position: relative;
+    width: 620px;
+    max-width: 100%;
+}
+.case-container{
+    width: 100%;
+    height: 120px;
+    background: #1a1f27;
+    border: 2px solid #333;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 20px #0008;
+}
+.case-track{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    will-change: transform;
+}
+.case-item{
+    flex-shrink: 0;
+    width: 130px;
+    height: 90px;
+    margin: 0 5px;
+    background: #222831;
+    border: 1px solid #444;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #eee;
+    padding: 0 6px;
+    line-height: 1.3;
+    word-break: break-all;
+}
+.case-item .sub{
+    font-size: 11px;
+    color: #aaa;
+    font-weight: normal;
+    margin-top: 2px;
+}
+.case-item:nth-child(even){
+    background: #2a313c;
+}
+
+/* 中间瞄准线 */
+.case-indicator{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    background: #ffc241;
+    box-shadow: 0 0 10px #ffc241;
+    z-index: 10;
+    pointer-events: none;
+}
+.case-indicator::before,
+.case-indicator::after{
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+}
+.case-indicator::before{
+    top: -2px;
+    border-top: 14px solid #ffc241;
+}
+.case-indicator::after{
+    bottom: -2px;
+    border-bottom: 14px solid #ffc241;
+}
+
+#spinBtn{
+    margin-top:30px;
+    padding:14px 48px;
+    font-size:18px;
+    font-weight:bold;
+    background:linear-gradient(135deg,#ffc241,#ff9f1a);
+    color:#111;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    box-shadow:0 4px 12px #ffc24144;
+    transition:0.2s;
+}
+#spinBtn:active{transform:scale(0.96);}
+#spinBtn:disabled{
+    background:#444;
+    color:#888;
+    cursor:not-allowed;
+    box-shadow:none;
+    transform:none;
+}
+.result{
+    margin-top:20px;
+    font-size:18px;
+    color:#ffc241;
+    min-height:28px;
+    text-align:center;
+}
+.record{
+    margin-top:16px;
+    padding:14px 16px;
+    border:1px solid #444;
+    border-radius:8px;
+    width: 620px;
+    max-width: 100%;
+}
+.record h3{
+    color:#ffc241;
+    font-size:16px;
+    margin-bottom:10px;
+}
+.record p{
+    font-size:14px;
+    color:#ddd;
+    line-height: 2;
+}
+.tips{
+    margin-top:12px;
+    color:#aaa;
+    font-size:13px;
+    text-align:center;
+    max-width:620px;
+}
+
+@media(max-width:650px){
+    .case-container{height: 100px;}
+    .case-item{
+        width: 105px;
+        height: 76px;
+        font-size: 12px;
+    }
+    h1{font-size:20px;}
+    .config-panel{padding: 12px;}
+}
+</style>
+</head>
+<body>
+<h1>🎯三角洲行动全能抽取器</h1>
+
+<!-- 配置面板 -->
+<div class="config-panel">
+    <div class="config-section">
+        <div class="config-title">📦 抽取内容（勾选参与抽取的项目）</div>
+        <div class="check-group">
+            <label class="check-item"><input type="checkbox" id="chk-weapon" checked> 武器</label>
+            <label class="check-item"><input type="checkbox" id="chk-helmet" checked> 头盔</label>
+            <label class="check-item"><input type="checkbox" id="chk-armor" checked> 护甲</label>
+            <label class="check-item"><input type="checkbox" id="chk-operator" checked> 干员角色</label>
+            <label class="check-item"><input type="checkbox" id="chk-map"> 地图</label>
+        </div>
+    </div>
+
+    <div class="config-section">
+        <div class="config-title">🛡️ 头盔护甲品级</div>
+        <div class="diff-group">
+            <button class="diff-btn" data-armor="easy">初级(1~3级)</button>
+            <button class="diff-btn" data-armor="mid">中级(3~4级)</button>
+            <button class="diff-btn" data-armor="hard">高级(3~5级)</button>
+            <button class="diff-btn fate active" data-armor="fate">🎲 命运(1~5级全随机)</button>
+        </div>
+    </div>
+
+    <div class="config-section" id="mapConfigSection" style="display:none;">
+        <div class="config-title">🗺️ 地图池（勾选参与抽取的地图）</div>
+        <div class="check-group">
+            <label class="check-item"><input type="checkbox" class="map-check" value="零号大坝" checked> 零号大坝</label>
+            <label class="check-item"><input type="checkbox" class="map-check" value="长弓溪谷" checked> 长弓溪谷</label>
+            <label class="check-item"><input type="checkbox" class="map-check" value="巴克什" checked> 巴克什</label>
+            <label class="check-item"><input type="checkbox" class="map-check" value="航天基地" checked> 航天基地</label>
+            <label class="check-item"><input type="checkbox" class="map-check" value="潮汐监狱" checked> 潮汐监狱</label>
+            <label class="check-item"><input type="checkbox" class="map-check" value="AZ3核电站" checked> AZ3核电站</label>
+        </div>
+        <div class="config-title" style="margin-top:10px; font-size:13px;">地图难度模式</div>
+        <div class="diff-group">
+            <button class="diff-btn active" data-mapdiff="normal">普通模式</button>
+            <button class="diff-btn" data-mapdiff="secret">机密模式</button>
+            <button class="diff-btn" data-mapdiff="top">绝密模式</button>
+        </div>
+    </div>
+</div>
+
+<div class="control-box">
+    <button class="reset-btn" id="resetBtn">重置重来</button>
+</div>
+
+<!-- 开箱滚动区 -->
+<div class="case-wrap">
+    <div class="case-container">
+        <div class="case-track" id="caseTrack"></div>
+    </div>
+    <div class="case-indicator"></div>
+</div>
+
+<button id="spinBtn">开始抽取</button>
+
+<div class="result" id="resText"></div>
+
+<div class="record">
+    <h3>📋 本局抽取结果</h3>
+    <p id="recordText">暂无抽取结果</p>
+</div>
+
+<div class="tips">勾选想要的抽取项，点击按钮依次滚动抽取；未勾选的项目会自动跳过</div>
+
+<script>
+// ===================== 可自行修改的抽取配置 =====================
+const DRAW_CONFIG = {
+    // 头盔/护甲 品级权重：数值越大，抽到的概率越高
+    armorLevelWeight: {
+        1: 3,   // 1级装备权重
+        2: 3,   // 2级装备权重
+        3: 6,   // 3级装备权重
+        4: 2.5, // 4级装备权重
+        5: 1    // 5级装备权重
+    },
+
+    // 武器分类权重：数值越大，该类武器出现概率越高
+    weaponCategoryWeight: {
+        rifle: 5,    // 突击步枪/战斗步枪
+        smg: 3,      // 冲锋枪
+        shotgun: 2,  // 霰弹枪
+        sniper: 3,   // 狙击枪/射手步枪
+        lmg: 2,      // 机枪
+        pistol: 1    // 手枪
+    },
+
+    // 重复物品惩罚系数
+    // 上一轮抽中过的物品，本轮权重 = 原权重 × 该系数
+    repeatPenalty: 0.3
+};
+// ==============================================================
+
+
+// ===================== 数据池配置 =====================
+
+// 武器池（按分类标注）
+const weaponList = [
+    // 步枪类 rifle
+    {name:"M4A1突击步枪", category:"rifle"},
+    {name:"RM277突击步枪", category:"rifle"},
+    {name:"K416突击步枪", category:"rifle"},
+    {name:"AKM突击步枪", category:"rifle"},
+    {name:"KC17", category:"rifle"},
+    {name:"AK-12突击步枪", category:"rifle"},
+    {name:"SCAR-H战斗步枪", category:"rifle"},
+    {name:"ASh-12战斗步枪", category:"rifle"},
+    {name:"腾龙突击步枪", category:"rifle"},
+    {name:"QBZ-95-1", category:"rifle"},
+    {name:"AUG突击步枪", category:"rifle"},
+    {name:"G3战斗步枪", category:"rifle"},
+    
+    // 冲锋枪 smg
+    {name:"Vector冲锋枪", category:"smg"},
+    {name:"P90冲锋枪", category:"smg"},
+    {name:"MP5冲锋枪", category:"smg"},
+    {name:"MP7冲锋枪", category:"smg"},
+    {name:"UZI冲锋枪", category:"smg"},
+    {name:"野牛冲锋枪", category:"smg"},
+    {name:"QCQ171冲锋枪", category:"smg"},
+    
+    // 狙击/射手步枪 sniper
+    {name:"SVCH精确射手步枪", category:"sniper"},
+    {name:"SVD射手步枪", category:"sniper"},
+    {name:"SKS射手步枪", category:"sniper"},
+    {name:"VSS射手步枪", category:"sniper"},
+    {name:"SV-98狙击枪", category:"sniper"},
+    {name:"R93狙击枪", category:"sniper"},
+    {name:"M700狙击枪", category:"sniper"},
+    
+    // 机枪 lmg
+    {name:"PKM通用机枪", category:"lmg"},
+    {name:"M249轻机枪", category:"lmg"},
+    {name:"QJB-201机枪", category:"lmg"},
+    
+    // 霰弹枪 shotgun
+    {name:"M870霰弹枪", category:"shotgun"},
+    {name:"FS-12霰弹枪", category:"shotgun"},
+    {name:"M1014霰弹枪", category:"shotgun"},
+    {name:"S12K霰弹枪", category:"shotgun"},
+    {name:"725双管霰弹枪", category:"shotgun"},
+    
+    // 手枪 pistol
+    {name:"G18手枪", category:"pistol"},
+    {name:"沙漠之鹰", category:"pistol"},
+    {name:"93R手枪", category:"pistol"},
+    {name:".357左轮", category:"pistol"}
+];
+
+// 头盔分级池
+const helmetPool = {
+    easy: [
+        "老式钢盔(1级)","安保头盔(1级)","奔尼帽(1级)","户外棒球帽(1级)",
+        "H01战术头盔(2级)","DRO战术头盔(2级)","复古摩托头盔(2级)","MC 防弹头盔(2级)",
+        "防暴头盔(3级)","DAS 防弹头盔(3级)","H07战术头盔(3级)","MC201防弹头盔(3级)"
+    ],
+    mid: [
+        "防暴头盔(3级)","DAS 防弹头盔(3级)","H07战术头盔(3级)","MC201防弹头盔(3级)",
+        "D6 战术头盔(4级)","MHS战术头盔(4级)","GT1战术头盔(4级)","DICH训练头盔(4级)"
+    ],
+    hard: [
+        "防暴头盔(3级)","DAS 防弹头盔(3级)","H07战术头盔(3级)","MC201防弹头盔(3级)",
+        "D6 战术头盔(4级)","MHS战术头盔(4级)","GT1战术头盔(4级)","DICH训练头盔(4级)",
+        "Mask-1铁壁头盔(5级)","H09 防暴头盔(5级)","GN 重型头盔(5级)","GN久战重型夜视头盔(5级)","DICH-1战术头盔(5级)","GN 重型夜视头盔(5级)"
+    ],
+    fate: []
+};
+
+// 护甲分级池
+const armorPool = {
+    easy: [
+        "摩托马甲(1级)","安保防弹衣(1级)","轻型防弹衣(1级)",
+        "简易防刺服(2级)","TG战术防弹衣(2级)","通用战术背心(2级)",
+        "Hvk快拆防弹衣(3级)","制式防弹背心(3级)","TG-H防弹衣(3级)","射手战术背心(3级)"
+    ],
+    mid: [
+        "Hvk快拆防弹衣(3级)","制式防弹背心(3级)","TG-H防弹衣(3级)","射手战术背心(3级)",
+        "武士防弹背心(4级)","突击手防弹背心(4级)","DT-AVS防弹衣(4级)","HMP特勤防弹衣(4级)","MK-2战术背心(4级)"
+    ],
+    hard: [
+        "Hvk快拆防弹衣(3级)","制式防弹背心(3级)","TG-H防弹衣(3级)","射手战术背心(3级)",
+        "武士防弹背心(4级)","突击手防弹背心(4级)","DT-AVS防弹衣(4级)","HMP特勤防弹衣(4级)","MK-2战术背心(4级)",
+        "Hvk-2防弹衣(5级)","精英防弹背心(5级)","FS复合防弹衣(5级)","重型突击背心(5级)"
+    ],
+    fate: []
+};
+
+// 自动构建命运模式全品级池
+(function buildFatePool(){
+    const allHelmets = new Set([...helmetPool.easy, ...helmetPool.mid, ...helmetPool.hard]);
+    helmetPool.fate = Array.from(allHelmets);
+    
+    const allArmors = new Set([...armorPool.easy, ...armorPool.mid, ...armorPool.hard]);
+    armorPool.fate = Array.from(allArmors);
+})();
+
+// 干员角色池
+const operatorList = [
+    {name:"红狼", sub:"凯·席尔瓦 | 突击"},
+    {name:"无名", sub:"埃利·德·蒙贝尔 | 突击"},
+    {name:"威龙", sub:"王宇吴 | 突击"},
+    {name:"疾风", sub:"克莱尔·安·拜尔斯 | 突击"},
+    {name:"牧羊人", sub:"泰瑞·缪萨 | 工程"},
+    {name:"液氮", sub:"加布里埃尔·默里尔 | 工程"},
+    {name:"乌鲁鲁", sub:"大卫·费莱尔 | 工程"},
+    {name:"深蓝", sub:"阿列克谢 | 工程"},
+    {name:"比特", sub:"拉希德 | 工程"},
+    {name:"蜂医", sub:"罗伊·斯米 | 支援"},
+    {name:"蛊", sub:"佐娅 | 支援"},
+    {name:"蝶", sub:"莉娜 | 支援"},
+    {name:"露娜", sub:"金卢娜 | 侦查"},
+    {name:"银翼", sub:"兰登 | 侦查"},
+    {name:"骇爪", sub:"麦晓雯 | 侦查"}
+];
+
+// 地图池
+const mapDiffText = {normal:"普通", secret:"机密", top:"绝密"};
+
+// ===================== 全局状态 =====================
+let armorMode = "fate"; // 默认命运模式
+let mapDiffMode = "normal";
+let spinQueue = [];
+let spinIndex = 0;
+let resultSet = {};
+let isSpinning = false;
+// 记录每个分类上一次抽中的物品，用于重复概率惩罚
+let lastResult = {
+    weapon: '',
+    helmet: '',
+    armor: '',
+    operator: '',
+    map: ''
+};
+
+const caseTrack = document.getElementById('caseTrack');
+const spinBtn = document.getElementById('spinBtn');
+const resetBtn = document.getElementById('resetBtn');
+const resText = document.getElementById('resText');
+const recordText = document.getElementById('recordText');
+
+// 动画配置
+const REPEAT_COUNT = 10;
+const ANIM_DURATION = 4000;
+const EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+// ===================== 配置交互 =====================
+
+// 显示/隐藏地图配置
+document.getElementById('chk-map').addEventListener('change', function(){
+    document.getElementById('mapConfigSection').style.display = this.checked ? 'block' : 'none';
+});
+
+// 头盔护甲难度切换
+document.querySelectorAll('[data-armor]').forEach(btn=>{
+    btn.onclick = function(){
+        document.querySelectorAll('[data-armor]').forEach(b=>b.classList.remove('active'));
+        this.classList.add('active');
+        armorMode = this.dataset.armor;
+        if(!isSpinning) resetAll();
+    };
+});
+
+// 地图难度切换
+document.querySelectorAll('[data-mapdiff]').forEach(btn=>{
+    btn.onclick = function(){
+        document.querySelectorAll('[data-mapdiff]').forEach(b=>b.classList.remove('active'));
+        this.classList.add('active');
+        mapDiffMode = this.dataset.mapdiff;
+    };
+});
+
+// ===================== 工具函数 =====================
+
+// Fisher-Yates 数组洗牌：随机打乱数组顺序，返回新数组
+function shuffleArray(arr) {
+    const newArr = [...arr];
+    for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+    }
+    return newArr;
+}
+
+// 从头甲名称中提取装备等级
+function getItemLevel(name){
+    const match = name.match(/\((\d)级\)/);
+    return match ? parseInt(match[1]) : 3;
+}
+
+// 加权随机抽取：支持品级/分类权重 + 历史重复惩罚
+function weightedRandom(pool, category){
+    const weights = pool.map((item) => {
+        let weight = 1;
+        
+        // 头盔/护甲按品级分配权重
+        if(category === 'helmet' || category === 'armor'){
+            const level = getItemLevel(item.text);
+            weight = DRAW_CONFIG.armorLevelWeight[level] || 1;
+        }
+        
+        // 武器按分类分配权重
+        if(category === 'weapon'){
+            weight = DRAW_CONFIG.weaponCategoryWeight[item.category] || 1;
+        }
+        
+        // 上一次抽中的物品，按惩罚系数降低权重
+        if(lastResult[category] === item.text){
+            weight *= DRAW_CONFIG.repeatPenalty;
+        }
+        
+        return weight;
+    });
+    
+    const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+    let random = Math.random() * totalWeight;
+    
+    for(let i = 0; i < weights.length; i++){
+        random -= weights[i];
+        if(random <= 0){
+            return i;
+        }
+    }
+    return pool.length - 1;
+}
+
+// 构建当前抽取队列
+function buildQueue(){
+    const queue = [];
+    if(document.getElementById('chk-weapon').checked) queue.push({key:'weapon', label:'武器'});
+    if(document.getElementById('chk-helmet').checked) queue.push({key:'helmet', label:'头盔'});
+    if(document.getElementById('chk-armor').checked) queue.push({key:'armor', label:'护甲'});
+    if(document.getElementById('chk-operator').checked) queue.push({key:'operator', label:'干员'});
+    if(document.getElementById('chk-map').checked) queue.push({key:'map', label:'地图'});
+    return queue;
+}
+
+// 获取当前步骤的物品池
+function getCurrentPool(){
+    const current = spinQueue[spinIndex];
+    if(!current) return [];
+
+    switch(current.key){
+        case 'weapon': 
+            return weaponList.map(w => ({text: w.name, sub: '', category: w.category}));
+        case 'helmet': 
+            return helmetPool[armorMode].map(name => ({text: name, sub: ''}));
+        case 'armor': 
+            return armorPool[armorMode].map(name => ({text: name, sub: ''}));
+        case 'operator': 
+            return operatorList.map(op => ({text: op.name, sub: op.sub}));
+        case 'map':
+            const checked = [];
+            document.querySelectorAll('.map-check:checked').forEach(cb=>{
+                checked.push({text: cb.value, sub: mapDiffText[mapDiffMode] + '模式'});
+            });
+            return checked;
+    }
+    return [];
+}
+
+// 生成滚动轨道
+function buildTrack(pool){
+    caseTrack.innerHTML = '';
+    for(let r = 0; r < REPEAT_COUNT; r++){
+        pool.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'case-item';
+            div.innerHTML = item.text + (item.sub ? `<div class="sub">${item.sub}</div>` : '');
+            caseTrack.appendChild(div);
+        });
+    }
+}
+
+// 更新记录面板
+function updateRecord(){
+    const lines = [];
+    const labelMap = {weapon:'武器', helmet:'头盔', armor:'护甲', operator:'干员', map:'地图'};
+    spinQueue.forEach(q=>{
+        const val = resultSet[q.key] || '待抽取';
+        lines.push(`${labelMap[q.key]}：${val}`);
+    });
+    recordText.innerHTML = lines.join('<br>');
+}
+
+// 重置
+function resetAll(){
+    spinQueue = buildQueue();
+    spinIndex = 0;
+    resultSet = {};
+    resText.innerText = "";
+    
+    if(spinQueue.length === 0){
+        spinBtn.innerText = "请至少勾选一项";
+        spinBtn.disabled = true;
+    }else{
+        spinBtn.innerText = `开始抽取（共${spinQueue.length}项）`;
+        spinBtn.disabled = false;
+    }
+    
+    const pool = shuffleArray(getCurrentPool());
+    if(pool.length > 0) buildTrack(pool);
+    caseTrack.style.transition = 'none';
+    caseTrack.style.transform = 'translateX(0)';
+    updateRecord();
+}
+
+// ===================== 事件绑定 =====================
+resetBtn.onclick = function(){
+    if(isSpinning) return;
+    resetAll();
+};
+
+['chk-weapon','chk-helmet','chk-armor','chk-operator','chk-map'].forEach(id=>{
+    document.getElementById(id).addEventListener('change', ()=>{
+        if(!isSpinning) resetAll();
+    });
+});
+document.querySelectorAll('.map-check').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+        if(!isSpinning) resetAll();
+    });
+});
+
+// ===================== 核心滚动抽奖 =====================
+function runSpin(){
+    if(isSpinning) return;
+    if(spinQueue.length === 0) return;
+
+    if(spinIndex >= spinQueue.length){
+        resetAll();
+        return;
+    }
+
+    // 每次抽取前打乱物品池顺序
+    const pool = shuffleArray(getCurrentPool());
+    if(pool.length === 0){
+        spinIndex++;
+        if(spinIndex >= spinQueue.length){
+            finishAll();
+        }else{
+            runSpin();
+        }
+        return;
+    }
+
+    const current = spinQueue[spinIndex];
+    resText.innerText = `正在抽取${current.label}...`;
+
+    isSpinning = true;
+    spinBtn.disabled = true;
+
+    buildTrack(pool);
+    caseTrack.style.transition = 'none';
+    caseTrack.style.transform = 'translateX(0)';
+    caseTrack.offsetHeight;
+
+    // 使用加权随机生成中奖索引
+    const winIndex = weightedRandom(pool, current.key);
+    const winItem = pool[winIndex];
+
+    const itemEl = caseTrack.querySelector('.case-item');
+    const itemWidth = itemEl.offsetWidth + 10;
+    const containerWidth = caseTrack.parentElement.clientWidth;
+    const centerOffset = containerWidth / 2 - itemWidth / 2;
+
+    const globalWinIndex = (REPEAT_COUNT - 3) * pool.length + winIndex;
+    const targetX = -(globalWinIndex * itemWidth - centerOffset);
+
+    caseTrack.style.transition = `transform ${ANIM_DURATION}ms ${EASING}`;
+    requestAnimationFrame(()=>{
+        caseTrack.style.transform = `translateX(${targetX}px)`;
+    });
+
+    setTimeout(()=>{
+        const winText = winItem.text + (winItem.sub ? `（${winItem.sub}）` : '');
+        resultSet[current.key] = winText;
+        // 记录本次结果，用于下一次抽取的重复惩罚
+        lastResult[current.key] = winItem.text;
+
+        spinIndex++;
+        updateRecord();
+
+        if(spinIndex < spinQueue.length){
+            const next = spinQueue[spinIndex];
+            resText.innerText = `✅${current.label}抽到：${winText}，点击继续抽取${next.label}`;
+            spinBtn.innerText = `抽取${next.label}`;
+        }else{
+            finishAll(winText, current.label);
+        }
+
+        isSpinning = false;
+        spinBtn.disabled = false;
+    }, ANIM_DURATION);
+}
+
+function finishAll(lastItem='', lastLabel=''){
+    if(lastItem){
+        resText.innerText = `🎉全部抽取完成！${lastLabel}：${lastItem}，点击重新抽取`;
+    }else{
+        resText.innerText = `🎉全部抽取完成！点击重新抽取`;
+    }
+    spinBtn.innerText = "重新抽取";
+}
+
+spinBtn.addEventListener('click', runSpin);
+
+// 初始化
+resetAll();
+</script>
+</body>
+</html>

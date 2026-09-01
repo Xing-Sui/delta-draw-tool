@@ -519,7 +519,7 @@ h1{
     <p id="recordText">暂无抽取结果</p>
 </div>
 <!-- 新增截图复制按钮 -->
-<button id="copyImageBtn" disabled>📷生成结果图片并复制到剪贴板</button>
+<button id="copyImageBtn" disabled>生成结果图片并复制到剪贴板</button>
 <div id="copyTip"></div>
 <div class="tips"></div>
 <script>
@@ -680,7 +680,7 @@ loop();
 // ===================== 可自行修改的抽取配置 =====================
 const DRAW_CONFIG = {
     armorLevelWeight: {
-        0:1, // 0级彩蛋权重，在这里修改大小
+        0:0.7, // 0级彩蛋权重，在这里修改大小
         1: 2,
         2: 2,
         3: 9,
@@ -763,7 +763,7 @@ const helmetPool = {
         "Mask-1铁壁头盔(5级)","H09 防暴头盔(5级)","GN 重型头盔(5级)","GN久战重型夜视头盔(5级)","DICH-1战术头盔(5级)","GN 重型夜视头盔(5级)"
     ],
     fate: [],
-    egg:["0级‑不要头【彩蛋】"] //0级彩蛋头盔池
+    egg:["不要头【我很猛】"] //0级彩蛋头盔池
 };
 const armorPool = {
     easy: [
@@ -781,7 +781,7 @@ const armorPool = {
         "Hvk-2防弹衣(5级)","精英防弹背心(5级)","FS复合防弹衣(5级)","重型突击背心(5级)"
     ],
     fate: [],
-    egg:["0级‑不要甲【彩蛋】"] //0级彩蛋护甲池
+    egg:["不要甲【我很猛】"] //0级彩蛋护甲池
 };
 (function buildFatePool(){
     const allHelmets = new Set([...helmetPool.easy, ...helmetPool.mid, ...helmetPool.hard,...helmetPool.egg]);

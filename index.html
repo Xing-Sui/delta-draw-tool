@@ -59,7 +59,6 @@ h1{
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-
 .diff-btn::before{
     content: "";
     position: absolute;
@@ -75,11 +74,9 @@ h1{
     );
     transition: left 0.45s ease;
 }
-
 .diff-btn:hover::before{
     left: 100%;
 }
-
 .diff-btn:hover{
     border-color: rgba(0, 210, 255, 0.75);
     color: #ffffff;
@@ -87,7 +84,6 @@ h1{
         inset 0 0 18px rgba(0, 210, 255, 0.18),
         0 0 22px rgba(0, 210, 255, 0.35);
 }
-
 .diff-btn.active{
     background: linear-gradient(135deg, #00d2ff, #00ffcc);
     color: #08111f;
@@ -97,7 +93,6 @@ h1{
         0 0 18px rgba(0, 210, 255, 0.45),
         0 0 34px rgba(0, 255, 204, 0.25);
 }
-
 .diff-btn.fate.active{
     background: linear-gradient(135deg, #a855f7, #ec4899);
     color: #fff;
@@ -106,7 +101,6 @@ h1{
         0 0 18px rgba(168, 85, 247, 0.45),
         0 0 34px rgba(236, 72, 153, 0.25);
 }
-
 /* ========== 重置按钮 ========== */
 .reset-btn{
     padding: 10px 20px;
@@ -125,7 +119,6 @@ h1{
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-
 .reset-btn::before{
     content: "";
     position: absolute;
@@ -141,22 +134,18 @@ h1{
     );
     transition: left 0.45s ease;
 }
-
 .reset-btn:hover::before{
     left: 100%;
 }
-
 .reset-btn:hover{
     box-shadow:
         inset 0 0 18px rgba(255, 80, 120, 0.18),
         0 0 24px rgba(255, 80, 120, 0.35);
     transform: translateY(-2px);
 }
-
 .reset-btn:active{
     transform: translateY(1px);
 }
-
 /* ========== 主抽取按钮 ========== */
 #spinBtn{
     margin-top: 32px;
@@ -178,7 +167,6 @@ h1{
     text-transform: uppercase;
     letter-spacing: 2px;
 }
-
 #spinBtn::before{
     content: "";
     position: absolute;
@@ -194,11 +182,9 @@ h1{
     );
     transition: left 0.55s ease;
 }
-
 #spinBtn:hover::before{
     left: 100%;
 }
-
 #spinBtn:hover{
     transform: translateY(-3px);
     box-shadow:
@@ -206,11 +192,9 @@ h1{
         0 0 44px rgba(0, 255, 204, 0.35),
         inset 0 0 18px rgba(255, 255, 255, 0.45);
 }
-
 #spinBtn:active{
     transform: translateY(1px);
 }
-
 #spinBtn:disabled{
     background: linear-gradient(135deg, #2c3e55, #1a2535);
     color: #5f6f88;
@@ -218,7 +202,6 @@ h1{
     box-shadow: none;
     transform: none;
 }
-
 /* ========== 配置面板 ========== */
 .config-panel{
     width: 680px;
@@ -510,7 +493,6 @@ h1{
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 let W, H;
-
 function resizeCanvas() {
     W = window.innerWidth;
     H = window.innerHeight;
@@ -519,12 +501,10 @@ function resizeCanvas() {
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
-
 class Meteor {
     constructor() {
         this.reset(true);
     }
-
     reset(randomDelay = false) {
         this.x = Math.random() * W * 1.5;
         this.y = Math.random() * H * 0.55 - 80;
@@ -541,7 +521,6 @@ class Meteor {
         this.delay = randomDelay ? Math.random() * 400 : 0;
         this.active = false;
     }
-
     update(time) {
         if (this.delay > 0) {
             this.delay--;
@@ -559,7 +538,6 @@ class Meteor {
             this.reset(false);
         }
     }
-
     draw(time) {
         if (!this.active || this.trail.length < 2) return;
         const flicker = 0.75 + Math.sin(this.flickerPhase) * 0.25;
@@ -603,7 +581,6 @@ class Meteor {
         ctx.fill();
     }
 }
-
 // 背景星星
 class Star {
     constructor() {
@@ -614,7 +591,6 @@ class Star {
         this.twinkleSpeed = 0.02 + Math.random() * 0.04;
         this.twinklePhase = Math.random() * Math.PI * 2;
     }
-
     draw(time) {
         const alpha = this.baseAlpha + Math.sin(time * this.twinkleSpeed + this.twinklePhase) * 0.25;
         ctx.beginPath();
@@ -623,18 +599,14 @@ class Star {
         ctx.fill();
     }
 }
-
 const stars = [];
 const meteors = [];
-
 for (let i = 0; i < 120; i++) {
     stars.push(new Star());
 }
-
 for (let i = 0; i < 12; i++) {
     meteors.push(new Meteor());
 }
-
 // FPS 暗色星空背景 + HUD 扫描线
 function drawBgBase(t) {
     const bgGrd = ctx.createLinearGradient(0, 0, W, H);
@@ -657,9 +629,7 @@ function drawBgBase(t) {
     ctx.fillStyle = vignet;
     ctx.fillRect(0, 0, W, H);
 }
-
 let frameTimer = 0;
-
 function loop() {
     frameTimer++;
     drawBgBase(frameTimer);
@@ -672,12 +642,11 @@ function loop() {
     }
     requestAnimationFrame(loop);
 }
-
 loop();
-
 // ===================== 可自行修改的抽取配置 =====================
 const DRAW_CONFIG = {
     armorLevelWeight: {
+        0:0.15, // 0级彩蛋权重，在这里修改大小
         1: 2,
         2: 2,
         3: 9,
@@ -757,9 +726,10 @@ const helmetPool = {
     hard: [
         "防暴头盔(3级)","DAS 防弹头盔(3级)","H07战术头盔(3级)","MC201防弹头盔(3级)",
         "D6 战术头盔(4级)","MHS战术头盔(4级)","GT1战术头盔(4级)","DICH训练头盔(4级)",
-        "Mask-1铁壁头盔(5级)","H09 防暴头盔(5级)","GN 重型头盔(5级)","GN久战重型夜视头盔(5级)","DICH-1战术头盔(5级)","GN 重型夜视头盔(5级)","不要头（彩蛋）"
+        "Mask-1铁壁头盔(5级)","H09 防暴头盔(5级)","GN 重型头盔(5级)","GN久战重型夜视头盔(5级)","DICH-1战术头盔(5级)","GN 重型夜视头盔(5级)"
     ],
-    fate: []
+    fate: [],
+    egg:["0级‑不要头【彩蛋】"] //0级彩蛋头盔池
 };
 const armorPool = {
     easy: [
@@ -774,14 +744,15 @@ const armorPool = {
     hard: [
         "Hvk快拆防弹衣(3级)","制式防弹背心(3级)","TG-H防弹衣(3级)","射手战术背心(3级)",
         "武士防弹背心(4级)","突击手防弹背心(4级)","DT-AVS防弹衣(4级)","HMP特勤防弹衣(4级)","MK-2战术背心(4级)",
-        "Hvk-2防弹衣(5级)","精英防弹背心(5级)","FS复合防弹衣(5级)","重型突击背心(5级)","不要甲（彩蛋）"
+        "Hvk-2防弹衣(5级)","精英防弹背心(5级)","FS复合防弹衣(5级)","重型突击背心(5级)"
     ],
-    fate: []
+    fate: [],
+    egg:["0级‑不要甲【彩蛋】"] //0级彩蛋护甲池
 };
 (function buildFatePool(){
-    const allHelmets = new Set([...helmetPool.easy, ...helmetPool.mid, ...helmetPool.hard]);
+    const allHelmets = new Set([...helmetPool.easy, ...helmetPool.mid, ...helmetPool.hard,...helmetPool.egg]);
     helmetPool.fate = Array.from(allHelmets);
-    const allArmors = new Set([...armorPool.easy, ...armorPool.mid, ...armorPool.hard]);
+    const allArmors = new Set([...armorPool.easy, ...armorPool.mid, ...armorPool.hard,...armorPool.egg]);
     armorPool.fate = Array.from(allArmors);
 })();
 const operatorList = [

@@ -395,7 +395,7 @@ h1{
 }
 .result{
     margin-top:24px;
-    font-size:20px;
+    font-size:24px;
     color:#00d2ff;
     min-height:30px;
     text-align:center;
@@ -403,7 +403,7 @@ h1{
 }
 .record{
     margin-top: 18px;
-    padding: 16px 18px;
+    padding: 26px 24px;
     border: 1px solid rgba(0, 210, 255, 0.35);
     border-radius: 12px;
     width: 620px;
@@ -416,14 +416,14 @@ h1{
 }
 .record h3{
     color: #00d2ff;
-    font-size: 17px;
-    margin-bottom: 12px;
+    font-size: 22px;
+    margin-bottom: 16px;
     text-shadow: 0 0 8px rgba(0, 210, 255, 0.35);
 }
 .record p{
-    font-size:14px;
+    font-size:18px;
     color:#e6f7ff;
-    line-height: 2.1;
+    line-height: 2.4;
 }
 .tips{
     margin-top:14px;
@@ -442,6 +442,10 @@ h1{
     h1{font-size:22px;}
     .config-panel{padding: 14px;}
     #spinBtn{padding:14px 36px;font-size:17px;}
+    .record{padding:20px 16px;}
+    .record h3{font-size:19px;}
+    .record p{font-size:16px;line-height:2.2;}
+    .result{font-size:20px;}
 }
 </style>
 </head>
@@ -840,7 +844,6 @@ const recordWrap = document.getElementById('recordWrap');
 const REPEAT_COUNT = 10;
 const ANIM_DURATION = 4000;
 const EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
-
 // ========= 截图复制图片到剪贴板功能 =========
 async function copyResultImage(){
     copyTip.innerText = "正在生成图片...";
@@ -865,7 +868,6 @@ async function copyResultImage(){
     }
 }
 copyImageBtn.onclick = copyResultImage;
-
 // =========【新增】同步命运按钮高亮状态 =========
 function syncFateBtnState(){
     const isAllSel = ALL_WEAPON_CATS.every(cat=> selectedWeaponCats.includes(cat));

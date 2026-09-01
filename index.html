@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>三角洲行动全能抽取器 - 开箱滚动版</title>
+<!-- 引入html2canvas用于截图 -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
 *{
     margin: 0;
@@ -201,6 +203,35 @@ h1{
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
+}
+/* ========== 复制截图按钮 ========== */
+#copyImageBtn{
+    margin-top:12px;
+    padding:10px 22px;
+    border:1px solid rgba(0,255,204,0.4);
+    background:linear-gradient(135deg,rgba(10,25,40,0.92),rgba(15,35,55,0.92));
+    color:#00ffcc;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:14px;
+    transition:0.22s;
+    box-shadow:0 0 12px rgba(0,255,204,0.15);
+}
+#copyImageBtn:hover:not(:disabled){
+    box-shadow:0 0 20px rgba(0,255,204,0.35);
+    transform:translateY(-2px);
+}
+#copyImageBtn:disabled{
+    opacity:0.35;
+    cursor:not-allowed;
+    transform:none;
+    box-shadow:none;
+}
+#copyTip{
+    margin-top:6px;
+    font-size:13px;
+    color:#aaa;
+    min-height:18px;
 }
 /* ========== 配置面板 ========== */
 .config-panel{
@@ -483,10 +514,13 @@ h1{
 </div>
 <button id="spinBtn">开始抽取</button>
 <div class="result" id="resText"></div>
-<div class="record">
+<div class="record" id="recordWrap">
     <h3>📋 本局抽取结果</h3>
     <p id="recordText">暂无抽取结果</p>
 </div>
+<!-- 新增截图复制按钮 -->
+<button id="copyImageBtn" disabled>📷生成结果图片并复制到剪贴板</button>
+<div id="copyTip"></div>
 <div class="tips"></div>
 <script>
 // ===================== Canvas 流星雨动态背景 =====================
@@ -646,7 +680,7 @@ loop();
 // ===================== 可自行修改的抽取配置 =====================
 const DRAW_CONFIG = {
     armorLevelWeight: {
-        0:0.7, // 0级彩蛋权重，在这里修改大小
+        0:1, // 0级彩蛋权重，在这里修改大小
         1: 2,
         2: 2,
         3: 9,
@@ -729,7 +763,7 @@ const helmetPool = {
         "Mask-1铁壁头盔(5级)","H09 防暴头盔(5级)","GN 重型头盔(5级)","GN久战重型夜视头盔(5级)","DICH-1战术头盔(5级)","GN 重型夜视头盔(5级)"
     ],
     fate: [],
-    egg:["不要头【你很猛】"] //0级彩蛋头盔池
+    egg:["0级‑不要头【彩蛋】"] //0级彩蛋头盔池
 };
 const armorPool = {
     easy: [
@@ -747,7 +781,7 @@ const armorPool = {
         "Hvk-2防弹衣(5级)","精英防弹背心(5级)","FS复合防弹衣(5级)","重型突击背心(5级)"
     ],
     fate: [],
-    egg:["不要甲【你很猛】"] //0级彩蛋护甲池
+    egg:["0级‑不要甲【彩蛋】"] //0级彩蛋护甲池
 };
 (function buildFatePool(){
     const allHelmets = new Set([...helmetPool.easy, ...helmetPool.mid, ...helmetPool.hard,...helmetPool.egg]);
@@ -800,9 +834,38 @@ const resetBtn = document.getElementById('resetBtn');
 const resText = document.getElementById('resText');
 const recordText = document.getElementById('recordText');
 const weapAllToggleBtn = document.getElementById('weapAllToggle');
+const copyImageBtn = document.getElementById('copyImageBtn');
+const copyTip = document.getElementById('copyTip');
+const recordWrap = document.getElementById('recordWrap');
 const REPEAT_COUNT = 10;
 const ANIM_DURATION = 4000;
 const EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+// ========= 截图复制图片到剪贴板功能 =========
+async function copyResultImage(){
+    copyTip.innerText = "正在生成图片...";
+    try{
+        const canvas = await html2canvas(recordWrap,{
+            backgroundColor:"#080b12",
+            scale:2
+        });
+        // 转blob
+        const blob = await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
+        const item = new ClipboardItem({ "image/png": blob });
+        await navigator.clipboard.write([item]);
+        copyTip.innerText = "✅图片已复制到剪贴板！可以直接粘贴";
+    }catch(err){
+        console.error(err);
+        copyTip.innerText = "❌复制失败，正在下载图片";
+        // 降级下载
+        const a = document.createElement("a");
+        a.download = "三角洲抽取结果.png";
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+    }
+}
+copyImageBtn.onclick = copyResultImage;
+
 // =========【新增】同步命运按钮高亮状态 =========
 function syncFateBtnState(){
     const isAllSel = ALL_WEAPON_CATS.every(cat=> selectedWeaponCats.includes(cat));
@@ -981,12 +1044,19 @@ function updateRecord(){
         lines.push(`${q.label}：${val}`);
     });
     recordText.innerHTML = lines.join('<br>');
+    // 判断是否有真正结果，启用截图按钮
+    const hasResult = Object.values(resultSet).some(v=>v && v!=='待抽取');
+    copyImageBtn.disabled = !hasResult;
+    if(!hasResult){
+        copyTip.innerText = "";
+    }
 }
 function resetAll(){
     spinQueue = buildQueue();
     spinIndex = 0;
     resultSet = {};
     resText.innerText = "";
+    copyTip.innerText = "";
     const dualGun = document.getElementById('chk-dualGun').checked;
     if(dualGun && selectedWeaponCats.length < 2){
         spinBtn.innerText = "⚠️双枪模式需要至少勾选2个武器分类";

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>三角洲行动全能抽取器 - 开箱滚动版</title>
+<title>三角洲行动娱乐抽取器</title>
 <!-- 引入html2canvas用于截图 -->
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
@@ -14,284 +14,241 @@
     font-family: "Microsoft Yahei", sans-serif;
 }
 body{
-    background: transparent;
-    color: #fff;
+    /* ======================
+    后台修改这里设置背景：
+    background-image: url("");
+    background‑size: cover;
+    background‑position: center;
+    背景透明度修改下面伪元素 opacity，0~1之间
+    不需要背景就把 background-image 注释掉
+    ====================== */
+    background-color: #ffffff;
+    color: #111;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 15px;
+    padding: 24px 15px;
     overflow-x:hidden;
+    position: relative;
 }
-/* 全屏画布背景层 */
-#bgCanvas{
-    position: fixed;
-    top:0;
-    left:0;
-    width:100vw;
-    height:100vh;
-    z-index:-10;
-    background:#050608;
+/* 背景遮罩层，用来实现背景图片透明度，不要删除 */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background-image: url("./1.jpg"); /*在这里填入图片地址*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.9; /* 修改这个数值调整背景透明度 0完全透明 1不透明 */
 }
+/* ========== 波普斜向渐变放大标题：左→右字体越来越大 ========== */
 h1{
-    color: #00d2ff;
-    margin-bottom: 16px;
-    font-size: 26px;
-    text-shadow:
-        0 0 12px rgba(0, 210, 255, 0.8),
-        0 0 24px rgba(0, 255, 204, 0.4);
+    margin-bottom: 24px;
     text-align: center;
-    letter-spacing: 2px;
+    transform: rotate(-6deg);
+    display: inline-flex;
+    gap: 2px;
+    flex-wrap: nowrap;
 }
-/* ========== 科幻FPS通用按钮 ========== */
+h1 span{
+    display: inline-block;
+    font-weight: 900;
+    color: #fff;
+    text-shadow:
+        3px 3px 0 #000,
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000;
+}
+/* 每个字从左到右越来越大 */
+h1 span:nth-child(1){ font-size:22px; color:#ff2255; }
+h1 span:nth-child(2){ font-size:24px; color:#2244ff; }
+h1 span:nth-child(3){ font-size:26px; color:#00bb44; }
+h1 span:nth-child(4){ font-size:28px; color:#ff4400; }
+h1 span:nth-child(5){ font-size:30px; color:#aa22ff; }
+h1 span:nth-child(6){ font-size:32px; color:#ff2255; }
+h1 span:nth-child(7){ font-size:34px; color:#2244ff; }
+h1 span:nth-child(8){ font-size:36px; color:#00bb44; }
+h1 span:nth-child(9){ font-size:38px; color:#ff4400; }
+h1 span:nth-child(10){ font-size:40px; color:#aa22ff; }
+h1 span:nth-child(11){ font-size:42px; color:#ff2255; }
+h1 span:nth-child(12){ font-size:44px; color:#2244ff; }
+h1 span:nth-child(13){ font-size:46px; color:#00bb44; }
+h1 span:nth-child(14){ font-size:48px; color:#ff4400; }
+/* ========== 漫画波普通用按钮：粗黑描边，高饱和，卡通风格 ========== */
 .diff-btn{
-    padding: 9px 16px;
-    border: 1px solid rgba(0, 210, 255, 0.35);
-    background: linear-gradient(135deg, rgba(10, 15, 30, 0.95), rgba(20, 30, 60, 0.9));
-    color: #00d2ff;
-    border-radius: 8px;
+    padding: 10px 18px;
+    border: 3px solid #000;
+    background: #2288ff;
+    color: #fff;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 13px;
-    transition: 0.22s ease;
-    box-shadow:
-        inset 0 0 12px rgba(0, 210, 255, 0.08),
-        0 0 12px rgba(0, 210, 255, 0.12);
+    font-weight: bold;
+    transition: transform 0.15s ease;
+    box-shadow: 4px 4px 0 #000;
     position: relative;
     overflow: hidden;
     text-transform: uppercase;
     letter-spacing: 1px;
-}
-.diff-btn::before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(0, 210, 255, 0.22),
-        transparent
-    );
-    transition: left 0.45s ease;
-}
-.diff-btn:hover::before{
-    left: 100%;
 }
 .diff-btn:hover{
-    border-color: rgba(0, 210, 255, 0.75);
-    color: #ffffff;
-    box-shadow:
-        inset 0 0 18px rgba(0, 210, 255, 0.18),
-        0 0 22px rgba(0, 210, 255, 0.35);
+    transform: translate(-2px,-2px);
+    box-shadow: 6px 6px 0 #000;
+}
+.diff-btn:active{
+    transform: translate(2px,2px);
+    box-shadow: 2px 2px 0 #000;
 }
 .diff-btn.active{
-    background: linear-gradient(135deg, #00d2ff, #00ffcc);
-    color: #08111f;
-    border-color: #00ffcc;
-    font-weight: bold;
-    box-shadow:
-        0 0 18px rgba(0, 210, 255, 0.45),
-        0 0 34px rgba(0, 255, 204, 0.25);
+    background: #ff2266;
+    color: #fff;
 }
 .diff-btn.fate.active{
-    background: linear-gradient(135deg, #a855f7, #ec4899);
+    background: #aa33ff;
     color: #fff;
-    border-color: #a855f7;
-    box-shadow:
-        0 0 18px rgba(168, 85, 247, 0.45),
-        0 0 34px rgba(236, 72, 153, 0.25);
 }
-/* ========== 重置按钮 ========== */
+/* ========== 重置按钮 波普 ========== */
 .reset-btn{
-    padding: 10px 20px;
-    border: 1px solid rgba(255, 80, 120, 0.45);
-    background: linear-gradient(135deg, rgba(80, 10, 30, 0.95), rgba(120, 20, 50, 0.9));
-    color: #ff5c8a;
-    border-radius: 10px;
+    padding: 11px 22px;
+    border:3px solid #000;
+    background: #ff3355;
+    color:#fff;
+    border-radius:4px;
     cursor: pointer;
-    transition: 0.22s ease;
-    font-size: 14px;
-    box-shadow:
-        inset 0 0 12px rgba(255, 80, 120, 0.08),
-        0 0 12px rgba(255, 80, 120, 0.12);
-    position: relative;
-    overflow: hidden;
+    font-weight:bold;
+    font-size:14px;
+    box-shadow:4px 4px 0 #000;
+    transition: transform 0.15s ease;
     text-transform: uppercase;
-    letter-spacing: 1px;
-}
-.reset-btn::before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 80, 120, 0.22),
-        transparent
-    );
-    transition: left 0.45s ease;
-}
-.reset-btn:hover::before{
-    left: 100%;
+    letter-spacing:1px;
 }
 .reset-btn:hover{
-    box-shadow:
-        inset 0 0 18px rgba(255, 80, 120, 0.18),
-        0 0 24px rgba(255, 80, 120, 0.35);
-    transform: translateY(-2px);
+    transform: translate(-2px,-2px);
+    box-shadow:6px 6px 0 #000;
 }
 .reset-btn:active{
-    transform: translateY(1px);
+    transform: translate(2px,2px);
+    box-shadow:2px 2px 0 #000;
 }
-/* ========== 主抽取按钮 ========== */
+/* ========== 主抽取大按钮 波普漫画 ========== */
 #spinBtn{
     margin-top: 32px;
-    padding: 16px 64px;
-    font-size: 20px;
-    font-weight: bold;
-    background: linear-gradient(135deg, #00d2ff, #00ffcc, #ffcc00);
-    color: #08111f;
-    border: none;
-    border-radius: 14px;
+    padding: 18px 70px;
+    font-size: 22px;
+    font-weight: 900;
+    background: #00dd77;
+    color:#000;
+    border: 4px solid #000;
+    border-radius: 6px;
     cursor: pointer;
-    box-shadow:
-        0 0 18px rgba(0, 210, 255, 0.45),
-        0 0 34px rgba(0, 255, 204, 0.25),
-        inset 0 0 12px rgba(255, 255, 255, 0.35);
-    transition: 0.22s ease;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 6px 6px 0 #000;
+    transition: transform 0.15s ease;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
-#spinBtn::before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.35),
-        transparent
-    );
-    transition: left 0.55s ease;
-}
-#spinBtn:hover::before{
-    left: 100%;
-}
 #spinBtn:hover{
-    transform: translateY(-3px);
-    box-shadow:
-        0 0 24px rgba(0, 210, 255, 0.55),
-        0 0 44px rgba(0, 255, 204, 0.35),
-        inset 0 0 18px rgba(255, 255, 255, 0.45);
+    transform: translate(-3px,-3px);
+    box-shadow:9px 9px 0 #000;
 }
 #spinBtn:active{
-    transform: translateY(1px);
+    transform: translate(3px,3px);
+    box-shadow:3px 3px 0 #000;
 }
 #spinBtn:disabled{
-    background: linear-gradient(135deg, #2c3e55, #1a2535);
-    color: #5f6f88;
+    background:#999;
+    color:#444;
     cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
+    transform:none;
+    box-shadow:4px 4px 0 #000;
 }
-/* ========== 复制截图按钮 ========== */
+/* ========== 复制截图按钮波普 ========== */
 #copyImageBtn{
-    margin-top:12px;
-    padding:10px 22px;
-    border:1px solid rgba(0,255,204,0.4);
-    background:linear-gradient(135deg,rgba(10,25,40,0.92),rgba(15,35,55,0.92));
-    color:#00ffcc;
-    border-radius:10px;
+    margin-top:14px;
+    padding:11px 24px;
+    border:3px solid #000;
+    background:#ffcc00;
+    color:#000;
+    font-weight:bold;
+    border-radius:4px;
     cursor:pointer;
     font-size:14px;
-    transition:0.22s;
-    box-shadow:0 0 12px rgba(0,255,204,0.15);
+    box-shadow:4px 4px 0 #000;
+    transition: transform 0.15s ease;
 }
 #copyImageBtn:hover:not(:disabled){
-    box-shadow:0 0 20px rgba(0,255,204,0.35);
-    transform:translateY(-2px);
+    transform: translate(-2px,-2px);
+    box-shadow:6px 6px 0 #000;
 }
 #copyImageBtn:disabled{
-    opacity:0.35;
+    opacity:0.4;
     cursor:not-allowed;
     transform:none;
-    box-shadow:none;
+    box-shadow:4px 4px 0 #000;
 }
 #copyTip{
-    margin-top:6px;
-    font-size:13px;
-    color:#aaa;
-    min-height:18px;
+    margin-top:8px;
+    font-size:14px;
+    color:#fff;
+    min-height:20px;
+    font-weight:bold;
+    text-shadow:1px 1px 2px #000;
 }
-/* ========== 配置面板 ========== */
+/* ========== 配置面板波普漫画风：粗黑边框，明亮底色，漫画阴影 ========== */
 .config-panel{
     width: 680px;
     max-width: 100%;
-    background: rgba(10, 15, 30, 0.86);
-    border: 1px solid rgba(0, 210, 255, 0.35);
-    box-shadow:
-        0 0 18px rgba(0, 210, 255, 0.12),
-        inset 0 0 22px rgba(0, 0, 0, 0.75);
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 22px;
-    backdrop-filter: blur(10px);
+    background: #fff;
+    border:4px solid #000;
+    box-shadow: 8px 8px 0 #000;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 24px;
 }
 .config-section{
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 .config-section:last-child{
     margin-bottom: 0;
 }
 .config-title{
-    color: #00d2ff;
-    font-size: 15px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    color:#ff2255;
+    font-size:16px;
+    font-weight:900;
+    margin-bottom:12px;
     display: flex;
     align-items: center;
-    gap: 6px;
-    text-shadow:0 0 6px rgba(0, 210, 255, 0.35);
+    gap:6px;
 }
 .check-group{
     display: flex;
     flex-wrap: wrap;
-    gap: 10px 16px;
+    gap:12px 18px;
 }
 .check-item{
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     cursor: pointer;
-    font-size: 14px;
-    color: #ddd;
+    font-size:14px;
+    color:#222;
     user-select: none;
-    transition:0.25s;
+    font-weight:bold;
 }
 .check-item input{
     cursor: pointer;
-    accent-color: #00d2ff;
-    width:16px;height:16px;
+    width:18px;height:18px;
 }
 .check-item:hover{
-    color: #00d2ff;
-    text-shadow:0 0 6px rgba(0, 210, 255, 0.4);
+    color:#2266ff;
 }
-/* 地图子选项 */
 .map-sublist{
     margin-top: 8px;
-    padding-left: 8px;
-    border-left: 2px solid #333;
+    padding-left: 10px;
+    border-left:3px solid #000;
     display: none;
 }
 .map-sublist.show{
@@ -299,159 +256,158 @@ h1{
 }
 .control-box{
     display:flex;
-    gap:12px;
-    margin-bottom:22px;
+    gap:14px;
+    margin-bottom:24px;
     flex-wrap:wrap;
     justify-content:center;
 }
-/* ========== 开箱滚动核心 ========== */
+/* ========== 开箱滚动区 波普漫画改造 ========== */
 .case-wrap{
     position: relative;
-    width: 620px;
+    width: 640px;
     max-width: 100%;
 }
 .case-container{
-    width: 100%;
-    height: 120px;
-    background: rgba(10, 15, 30, 0.88);
-    border: 2px solid rgba(0, 210, 255, 0.35);
-    border-radius: 14px;
-    overflow: hidden;
-    position: relative;
-    box-shadow:
-        inset 0 0 24px rgba(0, 0, 0, 0.85),
-        0 0 18px rgba(0, 210, 255, 0.12);
-    backdrop-filter: blur(8px);
+    width:100%;
+    height:130px;
+    background:#ffffff;
+    border:4px solid #000;
+    border-radius:6px;
+    overflow:hidden;
+    position:relative;
+    box-shadow: 6px 6px 0 #000;
 }
 .case-track{
-    height: 100%;
-    display: flex;
-    align-items: center;
+    height:100%;
+    display:flex;
+    align-items:center;
     will-change: transform;
 }
 .case-item{
-    flex-shrink: 0;
-    width: 130px;
-    height: 90px;
-    margin: 0 5px;
-    background: rgba(20, 30, 60, 0.8);
-    border: 1px solid rgba(0, 210, 255, 0.25);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 13px;
-    font-weight: bold;
-    color: #e6f7ff;
-    padding: 0 6px;
-    line-height: 1.3;
-    word-break: break-all;
-    box-shadow:
-        inset 0 0 12px rgba(0, 0, 0, 0.55),
-        0 0 8px rgba(0, 210, 255, 0.08);
+    flex-shrink:0;
+    width:134px;
+    height:96px;
+    margin:0 6px;
+    background:#00bbff;
+    border:3px solid #000;
+    border-radius:4px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size:13px;
+    font-weight:900;
+    color:#000;
+    padding:0 6px;
+    line-height:1.3;
+    word-break:break-all;
+    box-shadow:3px 3px 0 #000;
 }
 .case-item .sub{
-    font-size: 11px;
-    color: #91a4b8;
-    font-weight: normal;
-    margin-top: 2px;
+    font-size:11px;
+    color:#222;
+    font-weight:bold;
+    margin-top:3px;
 }
 .case-item:nth-child(even){
-    background: rgba(30, 45, 80, 0.8);
+    background:#ffdd22;
 }
-/* 中间瞄准线改成蓝绿色科幻感 */
+/* 中间瞄准指示器波普漫画 */
 .case-indicator{
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:50%;
     transform: translateX(-50%);
-    width: 4px;
-    background: linear-gradient(180deg, #00d2ff, #00ffcc);
-    box-shadow:
-        0 0 14px #00d2ff,
-        0 0 24px rgba(0, 255, 204, 0.65);
-    z-index: 10;
-    pointer-events: none;
+    width:6px;
+    background:#ff2266;
+    box-shadow:0 0 0 2px #000;
+    z-index:10;
+    pointer-events:none;
 }
 .case-indicator::before,
 .case-indicator::after{
     content: '';
-    position: absolute;
-    left: 50%;
+    position:absolute;
+    left:50%;
     transform: translateX(-50%);
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
+    border-left:12px solid transparent;
+    border-right:12px solid transparent;
 }
 .case-indicator::before{
-    top: -3px;
-    border-top: 16px solid #00d2ff;
+    top:-4px;
+    border-top:18px solid #ff2266;
+    filter: drop-shadow(0 2px 0 #000);
 }
 .case-indicator::after{
-    bottom: -3px;
-    border-bottom: 16px solid #00ffcc;
+    bottom:-4px;
+    border-bottom:18px solid #ff2266;
+    filter: drop-shadow(0 2px 0 #000);
 }
 .result{
-    margin-top:24px;
-    font-size:24px;
-    color:#00d2ff;
-    min-height:30px;
+    margin-top:26px;
+    font-size:26px;
+    color:#ff4477;
+    font-weight:900;
+    min-height:34px;
     text-align:center;
-    text-shadow:0 0 10px rgba(0, 210, 255, 0.4);
+    text-shadow:2px 2px 0 #000;
 }
 .record{
-    margin-top: 18px;
-    padding: 26px 24px;
-    border: 1px solid rgba(0, 210, 255, 0.35);
-    border-radius: 12px;
-    width: 620px;
-    max-width: 100%;
-    background: rgba(10, 15, 30, 0.86);
-    backdrop-filter: blur(10px);
-    box-shadow:
-        0 0 18px rgba(0, 0, 0, 0.75),
-        inset 0 0 18px rgba(0, 210, 255, 0.08);
+    margin-top:22px;
+    padding:28px 24px;
+    border:4px solid #000;
+    border-radius:6px;
+    width:640px;
+    max-width:100%;
+    background:#fff;
+    box-shadow:8px 8px 0 #000;
 }
 .record h3{
-    color: #00d2ff;
-    font-size: 22px;
-    margin-bottom: 16px;
-    text-shadow: 0 0 8px rgba(0, 210, 255, 0.35);
+    color:#2244ff;
+    font-size:23px;
+    margin-bottom:16px;
+    font-weight:900;
 }
 .record p{
-    font-size:18px;
-    color:#e6f7ff;
-    line-height: 2.4;
+    font-size:19px;
+    color:#111;
+    line-height:2.5;
+    font-weight:bold;
 }
 .tips{
-    margin-top:14px;
-    color:#aaa;
-    font-size:13px;
+    margin-top:16px;
+    color:#ffffff;
+    font-size:14px;
     text-align:center;
-    max-width:620px;
+    max-width:640px;
+    font-weight:bold;
+    text-shadow:1px 1px 2px #000;
 }
 @media(max-width:650px){
-    .case-container{height: 104px;}
+    .case-container{height:110px;}
     .case-item{
-        width: 105px;
-        height: 76px;
-        font-size: 12px;
+        width:108px;
+        height:80px;
+        font-size:12px;
     }
-    h1{font-size:22px;}
-    .config-panel{padding: 14px;}
-    #spinBtn{padding:14px 36px;font-size:17px;}
+    h1 span{
+        font-size: clamp(16px,3vw,36px);
+    }
+    .config-panel{padding:16px;}
+    #spinBtn{padding:15px 40px;font-size:18px;}
     .record{padding:20px 16px;}
-    .record h3{font-size:19px;}
+    .record h3{font-size:20px;}
     .record p{font-size:16px;line-height:2.2;}
-    .result{font-size:20px;}
+    .result{font-size:21px;}
 }
 </style>
 </head>
 <body>
-<canvas id="bgCanvas"></canvas>
-<h1>🎯三角洲行动全能抽取器</h1>
+<h1>
+<span>三</span><span>角</span><span>洲</span><span>行</span><span>动</span><span>全</span><span>能</span><span>抽</span><span>取</span><span>器</span>
+</h1>
 <!-- 配置面板 -->
 <div class="config-panel">
     <div class="config-section">
@@ -527,179 +483,134 @@ h1{
 <div id="copyTip"></div>
 <div class="tips"></div>
 <script>
-// ===================== Canvas 流星雨动态背景 =====================
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
-let W, H;
-function resizeCanvas() {
-    W = window.innerWidth;
-    H = window.innerHeight;
-    canvas.width = W;
-    canvas.height = H;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-class Meteor {
-    constructor() {
-        this.reset(true);
-    }
-    reset(randomDelay = false) {
-        this.x = Math.random() * W * 1.5;
-        this.y = Math.random() * H * 0.55 - 80;
-        this.angle = Math.PI / 4 + (Math.random() - 0.5) * 0.25;
-        this.speed = 1.8 + Math.random() * 3.2;
-        this.vx = -Math.cos(this.angle) * this.speed;
-        this.vy = Math.sin(this.angle) * this.speed;
-        this.trail = [];
-        this.maxTrail = 45 + Math.random() * 35;
-        this.brightness = 0.45 + Math.random() * 0.35;
-        this.size = 1.2 + Math.random() * 2.2;
-        this.flickerPhase = Math.random() * Math.PI * 2;
-        this.flickerSpeed = 0.008 + Math.random() * 0.012;
-        this.delay = randomDelay ? Math.random() * 400 : 0;
-        this.active = false;
-    }
-    update(time) {
-        if (this.delay > 0) {
-            this.delay--;
-            return;
-        }
-        this.active = true;
-        this.trail.push({ x: this.x, y: this.y });
-        if (this.trail.length > this.maxTrail) {
-            this.trail.shift();
-        }
-        this.x += this.vx;
-        this.y += this.vy;
-        this.flickerPhase += this.flickerSpeed;
-        if (this.x < -250 || this.y > H + 250) {
-            this.reset(false);
-        }
-    }
-    draw(time) {
-        if (!this.active || this.trail.length < 2) return;
-        const flicker = 0.75 + Math.sin(this.flickerPhase) * 0.25;
-        const alpha = this.brightness * flicker;
-        ctx.beginPath();
-        ctx.moveTo(this.trail[0].x, this.trail[0].y);
-        for (let i = 1; i < this.trail.length; i++) {
-            ctx.lineTo(this.trail[i].x, this.trail[i].y);
-        }
-        const trailGradient = ctx.createLinearGradient(
-            this.trail[0].x,
-            this.trail[0].y,
-            this.x,
-            this.y
-        );
-        trailGradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
-        trailGradient.addColorStop(0.25, `rgba(210, 230, 255, ${alpha * 0.18})`);
-        trailGradient.addColorStop(0.55, `rgba(255, 255, 255, ${alpha * 0.35})`);
-        trailGradient.addColorStop(0.85, `rgba(255, 255, 255, ${alpha * 0.65})`);
-        trailGradient.addColorStop(1, `rgba(255, 255, 255, ${alpha})`);
-        ctx.strokeStyle = trailGradient;
-        ctx.lineWidth = this.size;
-        ctx.lineCap = 'round';
-        ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
-        ctx.shadowBlur = 10;
-        ctx.stroke();
-        ctx.shadowBlur = 24;
-        ctx.globalAlpha = alpha * 0.35;
-        ctx.strokeStyle = 'rgba(210, 230, 255, 0.6)';
-        ctx.lineWidth = this.size * 3.5;
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-        ctx.shadowBlur = 0;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size * 1.6, 0, Math.PI * 2);
-        const headGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 1.6);
-        headGradient.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
-        headGradient.addColorStop(0.45, 'rgba(210, 230, 255, 0.55)');
-        headGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        ctx.fillStyle = headGradient;
-        ctx.fill();
-    }
-}
-// 背景星星
-class Star {
-    constructor() {
-        this.x = Math.random() * W;
-        this.y = Math.random() * H;
-        this.size = Math.random() * 2 + 0.5;
-        this.baseAlpha = 0.3 + Math.random() * 0.5;
-        this.twinkleSpeed = 0.02 + Math.random() * 0.04;
-        this.twinklePhase = Math.random() * Math.PI * 2;
-    }
-    draw(time) {
-        const alpha = this.baseAlpha + Math.sin(time * this.twinkleSpeed + this.twinklePhase) * 0.25;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-        ctx.fill();
-    }
-}
-const stars = [];
-const meteors = [];
-for (let i = 0; i < 120; i++) {
-    stars.push(new Star());
-}
-for (let i = 0; i < 12; i++) {
-    meteors.push(new Meteor());
-}
-// FPS 暗色星空背景 + HUD 扫描线
-function drawBgBase(t) {
-    const bgGrd = ctx.createLinearGradient(0, 0, W, H);
-    bgGrd.addColorStop(0, '#050608');
-    bgGrd.addColorStop(0.5, '#0b0e14');
-    bgGrd.addColorStop(1, '#131820');
-    ctx.fillStyle = bgGrd;
-    ctx.fillRect(0, 0, W, H);
-    ctx.strokeStyle = 'rgba(0, 210, 255, 0.04)';
-    ctx.lineWidth = 1;
-    for (let y = 0; y < H; y += 32) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(W, y);
-        ctx.stroke();
-    }
-    const vignet = ctx.createRadialGradient(W / 2, H / 2, Math.max(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.85);
-    vignet.addColorStop(0, 'rgba(0, 0, 0, 0)');
-    vignet.addColorStop(1, 'rgba(0, 0, 0, 0.65)');
-    ctx.fillStyle = vignet;
-    ctx.fillRect(0, 0, W, H);
-}
-let frameTimer = 0;
-function loop() {
-    frameTimer++;
-    drawBgBase(frameTimer);
-    for (const star of stars) {
-        star.draw(frameTimer);
-    }
-    for (const meteor of meteors) {
-        meteor.update(frameTimer);
-        meteor.draw(frameTimer);
-    }
-    requestAnimationFrame(loop);
-}
-loop();
-// ===================== 可自行修改的抽取配置 =====================
+// =====================【全部物品权重集中在这里修改！简单易懂】=====================
+/*
+权重说明：
+数字越大抽到概率越高；基准=1；设置0=不会抽出来
+例："M4A1突击步枪": 5  代表M4概率是普通物品(1)的5倍
+*/
+const ALL_ITEM_WEIGHTS = {
+    // --------武器权重--------
+    "M4A1突击步枪": 2,
+    "RM277突击步枪": 2,
+    "K416突击步枪": 2,
+    "AKM突击步枪": 2,
+    "KC17": 2,
+    "AK-12突击步枪": 2,
+    "SCAR-H战斗步枪": 2,
+    "腾龙突击步枪": 2,
+    "QBZ-95-1": 2,
+    "AUG突击步枪": 2,
+    "G3战斗步枪": 2,
+    "Vector冲锋枪":2,
+    "P90冲锋枪":2,
+    "MP5冲锋枪":2,
+    "MP7冲锋枪":2,
+    "UZI冲锋枪":2,
+    "野牛冲锋枪":2,
+    "QCQ171冲锋枪":2,
+    "SVCH精确射手步枪":2,
+    "Min-14":2,
+    "SVD射手步枪":2,
+    "SKS射手步枪":2,
+    "VSS射手步枪":2,
+    "SV-98狙击枪":2,
+    "R93狙击枪":2,
+    "M700狙击枪":2,
+    "PKM通用机枪":2,
+    "M249轻机枪":2,
+    "QJB-201机枪":2,
+    "M870霰弹枪":2,
+    "FS-12霰弹枪":2,
+    "M1014霰弹枪":2,
+    "S12K霰弹枪":2,
+    "725双管霰弹枪":2,
+    "G18手枪":2,
+    "沙漠之鹰":2,
+    "93R手枪":2,
+    ".357左轮":2,
+    //扩展武器库
+    "M14":2,
+    "SR-25射手步枪":2,
+    "巴雷特":1,
+    "AWM狙击枪":1,
+    "AS‑Val巨浪":2,
+    "M7战斗步枪":2,
+    "ASh-12战斗步枪":2,
+    // --------头盔权重--------
+    "老式钢盔(1级)":3,
+    "安保头盔(1级)":3,
+    "奔尼帽(1级)":3,
+    "户外棒球帽(1级)":3,
+    "H01战术头盔(2级)":3,
+    "DRO战术头盔(2级)":3,
+    "复古摩托头盔(2级)":3,
+    "MC 防弹头盔(2级)":3,
+    "防暴头盔(3级)":3,
+    "DAS 防弹头盔(3级)":3,
+    "H07战术头盔(3级)":3,
+    "MC201防弹头盔(3级)":3,
+    "D6 战术头盔(4级)":2,
+    "MHS战术头盔(4级)":2,
+    "GT1战术头盔(4级)":2,
+    "DICH训练头盔(4级)":2,
+    "Mask-1铁壁头盔(5级)":0.8,
+    "H09 防暴头盔(5级)":0.8,
+    "GN 重型头盔(5级)":0.8,
+    "GN久战重型夜视头盔(5级)":0.8,
+    "DICH-1战术头盔(5级)":0.8,
+    "GN 重型夜视头盔(5级)":0.8,
+    "不要头【我很猛】":0.3, //彩蛋头盔
+    // --------护甲权重--------
+    "摩托马甲(1级)":3,
+    "安保防弹衣(1级)":3,
+    "轻型防弹衣(1级)":3,
+    "简易防刺服(2级)":3,
+    "TG战术防弹衣(2级)":3,
+    "通用战术背心(2级)":3,
+    "Hvk快拆防弹衣(3级)":3,
+    "制式防弹背心(3级)":3,
+    "TG-H防弹衣(3级)":3,
+    "射手战术背心(3级)":3,
+    "武士防弹背心(4级)":2,
+    "突击手防弹背心(4级)":2,
+    "DT-AVS防弹衣(4级)":2,
+    "HMP特勤防弹衣(4级)":2,
+    "MK-2战术背心(4级)":2,
+    "Hvk-2防弹衣(5级)":0.8,
+    "精英防弹背心(5级)":0.8,
+    "FS复合防弹衣(5级)":0.8,
+    "重型突击背心(5级)":0.8,
+    "不要甲【我很猛】":0.3, //彩蛋护甲
+    // --------干员权重--------
+    "红狼":1,
+    "无名":1,
+    "威龙":1,
+    "疾风":1,
+    "牧羊人":1,
+    "液氮":1,
+    "乌鲁鲁":1,
+    "深蓝":1,
+    "比特":1,
+    "蜂医":1,
+    "蛊":1,
+    "蝶":1,
+    "露娜":1,
+    "银翼":1,
+    "骇爪":1,
+    // --------地图权重--------
+    "零号大坝-机密":1,
+    "长弓溪谷-机密":1,
+    "巴克什-机密":1,
+    "航天基地-机密":1,
+    "AZ3核电站-机密":1,
+    "巴克什-绝密":0.8,
+    "航天基地-绝密":0.8,
+    "潮汐监狱-绝密":0.8
+};
+// 旧全局配置（保留重复惩罚，物品等级倍率现在失效，全部交给上面ALL_ITEM_WEIGHTS）
 const DRAW_CONFIG = {
-    armorLevelWeight: {
-        0: 0.6, // 0级彩蛋权重，在这里修改大小
-        1: 2,
-        2: 2,
-        3: 9,
-        4: 1.5,
-        5: 0.5
-    },
-    weaponCategoryWeight: {
-        rifle: 5,
-        smg: 3,
-        shotgun: 2,
-        sniper: 3,
-        lmg: 2,
-        pistol: 1
-    },
-    repeatPenalty: 0.3
+    repeatPenalty: 0.3 //上一次抽到的物品本次权重乘0.3，防止连续重复
 };
 // ==============================================================
 const weaponList = [
@@ -825,8 +736,10 @@ let spinIndex = 0;
 let resultSet = {};
 let isSpinning = false;
 let dualGunExcludeCat = null;
+// 修改lastResult，双枪分开记录
 let lastResult = {
-    weapon: '',
+    weapon1: '',
+    weapon2: '',
     helmet: '',
     armor: '',
     operator: '',
@@ -849,7 +762,7 @@ async function copyResultImage(){
     copyTip.innerText = "正在生成图片...";
     try{
         const canvas = await html2canvas(recordWrap,{
-            backgroundColor:"#080b12",
+            backgroundColor:"#ffffff",
             scale:2
         });
         // 转blob
@@ -862,7 +775,7 @@ async function copyResultImage(){
         copyTip.innerText = "❌复制失败，正在下载图片";
         // 降级下载
         const a = document.createElement("a");
-        a.download = "三角洲抽取结果.png";
+        a.download = "三角洲抽取结果_波普版.png";
         a.href = canvas.toDataURL("image/png");
         a.click();
     }
@@ -936,24 +849,16 @@ function shuffleArray(arr) {
     }
     return newArr;
 }
-function getItemLevel(name){
-    const match = name.match(/\((\d)级\)/);
-    return match ? parseInt(match[1]) : 3;
-}
-function weightedRandom(pool, category){
+// =========重写加权随机函数，读取ALL_ITEM_WEIGHTS=========
+function weightedRandom(pool, lastItemKey){
     const weights = pool.map((item) => {
-        let weight = 1;
-        if(category === 'helmet' || category === 'armor'){
-            const level = getItemLevel(item.text);
-            weight = DRAW_CONFIG.armorLevelWeight[level] || 1;
+        // 优先读取全局权重表，没有定义默认1
+        let w = ALL_ITEM_WEIGHTS[item.text] ?? 1;
+        // 如果上一轮抽过这个物品，施加重复惩罚
+        if(lastResult[lastItemKey] === item.text){
+            w *= DRAW_CONFIG.repeatPenalty;
         }
-        if(category === 'weapon'){
-            weight = DRAW_CONFIG.weaponCategoryWeight[item.category] || 1;
-        }
-        if(lastResult[category] === item.text){
-            weight *= DRAW_CONFIG.repeatPenalty;
-        }
-        return weight;
+        return w;
     });
     const totalWeight = weights.reduce((sum, w) => sum + w, 0);
     let random = Math.random() * totalWeight;
@@ -972,8 +877,8 @@ function buildQueue(){
     dualGunExcludeCat = null;
     if(weaponChecked){
         if(dualGun){
-            queue.push({key:'weapon', label:'武器①', isDualFirst:true});
-            queue.push({key:'weapon', label:'武器②', isDualSecond:true});
+            queue.push({key:'weapon1', label:'武器①', isDualFirst:true});
+            queue.push({key:'weapon2', label:'武器②', isDualSecond:true});
         }else{
             queue.push({key:'weapon', label:'武器'});
         }
@@ -988,7 +893,9 @@ function getCurrentPool(){
     const current = spinQueue[spinIndex];
     if(!current) return [];
     switch(current.key){
-        case 'weapon': {
+        case 'weapon':
+        case 'weapon1':
+        case 'weapon2': {
             let wList = [...weaponList];
             if(document.getElementById('chk-weapon-extra').checked){
                 wList = wList.concat(extraWeaponList);
@@ -1099,7 +1006,7 @@ function runSpin(){
         return;
     }
     const current = spinQueue[spinIndex];
-    const pool = shuffleArray(getCurrentPool());
+    let pool = getCurrentPool();
     if(pool.length === 0){
         if(current.isDualSecond){
             resText.innerText = "⚠️双枪模式：剩余可选武器分类为空，请多选几类武器！";
@@ -1114,6 +1021,8 @@ function runSpin(){
         }
         return;
     }
+    // 单次抽取只shuffle一次！pool数组，buildTrack和加权随机共用同一个数组！保证DOM顺序和数组顺序严格对应
+    pool = shuffleArray(pool);
     resText.innerText = `正在抽取${current.label}...`;
     isSpinning = true;
     spinBtn.disabled = true;
@@ -1121,25 +1030,45 @@ function runSpin(){
     caseTrack.style.transition = 'none';
     caseTrack.style.transform = 'translateX(0)';
     caseTrack.offsetHeight;
+    // 加权随机，使用当前pool数组
     const winIndex = weightedRandom(pool, current.key);
     const winItem = pool[winIndex];
+    // 修正item宽度计算，包含左右margin 6px+6px
     const itemEl = caseTrack.querySelector('.case-item');
-    const itemWidth = itemEl.offsetWidth + 10;
+    const itemWidthFull = itemEl.offsetWidth + 12; // width + margin-left + margin-right
     const containerWidth = caseTrack.parentElement.clientWidth;
-    const centerOffset = containerWidth / 2 - itemWidth / 2;
-    const globalWinIndex = (REPEAT_COUNT - 3) * pool.length + winIndex;
-    const targetX = -(globalWinIndex * itemWidth - centerOffset);
+    const centerOffset = containerWidth / 2 - itemWidthFull / 2;
+    // 选择靠后副本，防止滚动到最开头
+    const copyIndex = REPEAT_COUNT - 3;
+    const globalWinIndex = copyIndex * pool.length + winIndex;
+    const targetX = -(globalWinIndex * itemWidthFull - centerOffset);
     caseTrack.style.transition = `transform ${ANIM_DURATION}ms ${EASING}`;
     requestAnimationFrame(()=>{
         caseTrack.style.transform = `translateX(${targetX}px)`;
     });
     setTimeout(()=>{
-        const winText = winItem.text + (winItem.sub ? `（${winItem.sub}）` : '');
+        // 动画结束：读取瞄准位置的DOM，做校验兜底，防止视觉和逻辑不一致
+        const itemsDom = Array.from(caseTrack.querySelectorAll('.case-item'));
+        const finalWinDom = itemsDom[globalWinIndex];
+        let finalText = winItem.text;
+        let finalSub = winItem.sub;
+        if(finalWinDom){
+            const domText = finalWinDom.innerText.replace(/\n.*/,"").trim();
+            // 兜底校验，如果DOM展示文本和逻辑选中不一致，以DOM展示为准
+            if(domText && domText !== winItem.text){
+                const findIdx = pool.findIndex(p=>p.text === domText);
+                if(findIdx >= 0){
+                    finalText = pool[findIdx].text;
+                    finalSub = pool[findIdx].sub;
+                }
+            }
+        }
+        const winText = finalText + (finalSub ? `（${finalSub}）` : '');
         resultSet[current.key + '_' + current.label] = winText;
         if(current.isDualFirst){
             dualGunExcludeCat = winItem.category;
         }
-        lastResult[current.key] = winItem.text;
+        lastResult[current.key] = finalText;
         spinIndex++;
         updateRecord();
         if(spinIndex < spinQueue.length){
